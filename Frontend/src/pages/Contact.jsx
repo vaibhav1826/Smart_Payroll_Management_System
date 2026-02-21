@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import axios from 'axios'
+import Logo from '../components/Logo'
 
 export default function Contact() {
   const [form, setForm] = useState({ name: '', email: '', message: '' })
@@ -9,40 +9,78 @@ export default function Contact() {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    setStatus(null)
     try {
-      const resp = await axios.post('http://localhost:4000/api/contact', form)
-      if (resp.data && resp.data.ok) setStatus('Sent!')
-      else setStatus('Error')
-    } catch (err) {
-      console.error(err)
+      const resp = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      })
+      const data = await resp.json()
+      setStatus(data?.ok ? 'Sent!' : 'Error')
+    } catch {
       setStatus('Error')
     }
   }
 
   return (
-    <section>
-      <h2>Contact</h2>
-      <form onSubmit={handleSubmit} style={{ maxWidth: 500 }}>
-        <div>
-          <label>Name</label>
-          <br />
-          <input name="name" value={form.name} onChange={handleChange} required />
+    <section className="contact-page">
+      <div className="contact-page-wrap">
+        <header className="contact-page-brand">
+          <Logo width={72} height={72} />
+          <div className="contact-page-brand-text">
+            <h2>Contact Us</h2>
+            <p>Get in touch for demos, pricing, or support. We're here to help.</p>
+          </div>
+        </header>
+        <div className="contact-page-card">
+          <form onSubmit={handleSubmit} className="contact-form">
+            <div className="contact-form-group">
+              <label htmlFor="contact-name">Name</label>
+              <input
+                id="contact-name"
+                name="name"
+                value={form.name}
+                onChange={handleChange}
+                placeholder="Your name"
+                required
+              />
+            </div>
+            <div className="contact-form-group">
+              <label htmlFor="contact-email">Email</label>
+              <input
+                id="contact-email"
+                name="email"
+                type="email"
+                value={form.email}
+                onChange={handleChange}
+                placeholder="your@email.com"
+                required
+              />
+            </div>
+            <div className="contact-form-group">
+              <label htmlFor="contact-message">Message</label>
+              <textarea
+                id="contact-message"
+                name="message"
+                value={form.message}
+                onChange={handleChange}
+                placeholder="Your message or question..."
+                rows={5}
+                required
+              />
+            </div>
+            <button type="submit" className="contact-form-submit">
+              Send Message
+            </button>
+          </form>
+          {status && (
+            <p className={`contact-status ${status === 'Sent!' ? 'contact-status-success' : 'contact-status-error'}`}>
+              {status === 'Sent!' ? "Message sent. We'll get back to you soon." : 'Something went wrong. Please try again.'}
+            </p>
+          )}
         </div>
-        <div>
-          <label>Email</label>
-          <br />
-          <input name="email" type="email" value={form.email} onChange={handleChange} required />
-        </div>
-        <div>
-          <label>Message</label>
-          <br />
-          <textarea name="message" value={form.message} onChange={handleChange} required />
-        </div>
-        <div style={{ marginTop: 8 }}>
-          <button type="submit">Send</button>
-        </div>
-      </form>
-      {status && <p>{status}</p>}
+      </div>
     </section>
   )
 }

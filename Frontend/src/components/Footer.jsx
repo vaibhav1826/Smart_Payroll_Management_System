@@ -30,7 +30,6 @@ export default function Footer({ setPage }) {
           <ul className="footer-links">
             <li><a href="#home" onClick={(e) => handleNavClick(e, 'home')}>Home</a></li>
             <li><a href="#about" onClick={(e) => handleNavClick(e, 'about')}>About</a></li>
-            <li><a href="#projects" onClick={(e) => handleNavClick(e, 'projects')}>Projects</a></li>
             <li><a href="#contact" onClick={(e) => handleNavClick(e, 'contact')}>Contact</a></li>
           </ul>
         </div>
