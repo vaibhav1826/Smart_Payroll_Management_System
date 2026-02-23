@@ -5,6 +5,7 @@ require('dotenv').config();
 
 const { connectDB } = require('./config/db');
 const { authRoutes } = require('./auth');
+const employeeRoutes = require('./routes/employeeRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -18,6 +19,9 @@ connectDB();
 
 // Auth microservice – JWT login/register
 app.use('/api/auth', authRoutes);
+
+// Employee CRUD routes (protected)
+app.use('/api/employees', employeeRoutes);
 
 app.get('/api/ping', (req, res) => res.json({ ok: true }));
 
