@@ -1,0 +1,14 @@
+const express = require('express');
+const cookieParser = require('cookie-parser');
+const { connectDB } = require('../../shared/utils/db');
+const { MONGO_URI } = require('../../shared/config');
+const errorHandler = require('../../shared/middleware/errorHandler');
+const app = express();
+const PORT = process.env.PLATFORM_SERVICE_PORT || 4005;
+app.use(express.json());
+app.use(cookieParser());
+app.get('/health', (req, res) => res.json({ ok: true, service: 'platform' }));
+app.use('/api/notifications', require('./routes/notificationRoutes'));
+app.use('/api/audit-logs', require('./routes/auditRoutes'));
+app.use(errorHandler);
+connectDB(MONGO_URI).then(() => { app.listen(PORT, () => console.log(`Platform Service listening on port ${PORT}`)); });

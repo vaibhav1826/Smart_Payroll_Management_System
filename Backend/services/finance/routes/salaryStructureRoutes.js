@@ -1,0 +1,10 @@
+const express = require('express');
+const sc = require('../controllers/salaryStructureController');
+const { verifyToken, requireRoles } = require('../../../shared/middleware/authMiddleware');
+const router = express.Router();
+router.use(verifyToken);
+router.get('/', sc.list);
+router.post('/', requireRoles('admin'), sc.create);
+router.put('/:id', requireRoles('admin'), sc.update);
+router.delete('/:id', requireRoles('admin'), sc.remove);
+module.exports = router;

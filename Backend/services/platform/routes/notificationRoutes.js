@@ -1,0 +1,11 @@
+const express = require('express');
+const ctrl = require('../controllers/notificationController');
+const { verifyToken, requireRoles } = require('../../../shared/middleware/authMiddleware');
+const router = express.Router();
+router.use(verifyToken);
+router.get('/', ctrl.list);
+router.post('/', requireRoles('admin'), ctrl.create);
+router.put('/:id/read', ctrl.markRead);
+router.put('/read-all', ctrl.markAllRead);
+router.delete('/:id', ctrl.remove);
+module.exports = router;

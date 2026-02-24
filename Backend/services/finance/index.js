@@ -1,0 +1,14 @@
+const express = require('express');
+const cookieParser = require('cookie-parser');
+const { connectDB } = require('../../shared/utils/db');
+const { MONGO_URI } = require('../../shared/config');
+const errorHandler = require('../../shared/middleware/errorHandler');
+const app = express();
+const PORT = process.env.FINANCE_SERVICE_PORT || 4004;
+app.use(express.json());
+app.use(cookieParser());
+app.get('/health', (req, res) => res.json({ ok: true, service: 'finance' }));
+app.use('/api/payroll', require('./routes/payrollRoutes'));
+app.use('/api/salary-structures', require('./routes/salaryStructureRoutes'));
+app.use(errorHandler);
+connectDB(MONGO_URI).then(() => { app.listen(PORT, () => console.log(`Finance Service listening on port ${PORT}`)); });

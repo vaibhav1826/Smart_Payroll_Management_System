@@ -1,0 +1,14 @@
+const express = require('express');
+const ctrl = require('../controllers/contractorController');
+const { verifyToken, requireRoles } = require('../../../shared/middleware/authMiddleware');
+const { auditMiddleware } = require('../../../shared/middleware/auditLogger');
+const router = express.Router();
+router.use(verifyToken);
+router.use(auditMiddleware('contractor'));
+router.get('/', ctrl.list);
+router.get('/:id', ctrl.getOne);
+router.post('/', requireRoles('admin'), ctrl.create);
+router.put('/:id', requireRoles('admin'), ctrl.update);
+router.delete('/:id', requireRoles('admin'), ctrl.remove);
+router.put('/:id/assign-employees', requireRoles('admin'), ctrl.assignEmployees);
+module.exports = router;

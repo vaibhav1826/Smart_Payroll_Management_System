@@ -1,0 +1,9 @@
+# Backend-specific ignores (supplements root .gitignore)
+.env
+.env.*
+!.env.example
+
+node_modules/
+logs/
+*.log
+dist/
