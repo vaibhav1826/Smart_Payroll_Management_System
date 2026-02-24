@@ -1,0 +1,235 @@
+/* ════════════════════════════════════════
+   RESPONSIVE — Mobile-first breakpoints
+   Desktop: sidebar is in-flow (sticky)
+   Mobile: sidebar is fixed overlay
+   ════════════════════════════════════════ */
+
+/* ── Tablet (max 1024px) ── */
+@media (max-width: 1024px) {
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .charts-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .dashboard-content {
+        padding: 20px;
+    }
+
+    .footer-content {
+        grid-template-columns: 1fr 1fr;
+        gap: 28px;
+    }
+
+    .about-feature-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .quick-grid-2,
+    .quick-grid-3 {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ── Mobile (max 768px) ── */
+@media (max-width: 768px) {
+
+    /* ── Sidebar: switch to fixed overlay ── */
+    .sidebar {
+        position: fixed !important;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        z-index: var(--z-sidebar);
+        transform: translateX(-100%);
+        transition: transform 0.25s ease, box-shadow 0.25s ease;
+        box-shadow: none;
+        max-height: 100vh;
+    }
+
+    .sidebar.sidebar-expanded {
+        transform: translateX(0);
+        box-shadow: 4px 0 24px rgba(0, 0, 0, 0.15);
+    }
+
+    .sidebar.sidebar-collapsed {
+        transform: translateX(-100%);
+    }
+
+    /* Dim overlay when sidebar open */
+    .dashboard-shell.sidebar-open::before {
+        content: '';
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.3);
+        z-index: var(--z-overlay);
+        backdrop-filter: blur(1px);
+    }
+
+    /* Main always full-width on mobile */
+    .dashboard-main {
+        margin-left: 0 !important;
+    }
+
+    /* Topbar stays at z-sticky under sidebar */
+    .topbar {
+        z-index: calc(var(--z-sticky) + 10);
+    }
+
+    .dashboard-content {
+        padding: 14px 16px;
+    }
+
+    /* Page header stacks */
+    .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+        padding-bottom: 12px;
+    }
+
+    /* Grids collapse */
+    .stats-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .charts-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .quick-grid-2,
+    .quick-grid-3 {
+        grid-template-columns: 1fr;
+    }
+
+    /* Public nav links hidden on mobile */
+    .public-nav-links {
+        display: none;
+    }
+
+    .public-nav-inner {
+        padding: 0 16px;
+    }
+
+    /* Landing tweaks */
+    .landing-hero-inner {
+        padding: 60px 20px;
+    }
+
+    .landing-hero-title {
+        font-size: 2rem;
+    }
+
+    .landing-problem-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .landing-workflow-line {
+        display: none;
+    }
+
+    .landing-cta {
+        padding: 60px 20px;
+    }
+
+    /* Footer */
+    .footer-content {
+        grid-template-columns: 1fr 1fr;
+        padding: 36px 20px 24px;
+    }
+
+    .footer-bottom {
+        padding: 14px 20px;
+    }
+
+    .topbar {
+        padding: 0 16px;
+    }
+
+    /* About */
+    .about-page {
+        padding: 24px 16px;
+    }
+
+    .about-feature-grid {
+        grid-template-columns: 1fr;
+    }
+
+    /* Salary slip */
+    .slip-breakdown {
+        grid-template-columns: 1fr;
+    }
+
+    .slip-employee-info {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ── Small phones (max 480px) ── */
+@media (max-width: 480px) {
+    .stats-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .auth-card {
+        padding: 24px 18px;
+    }
+
+    .modal-body {
+        padding: 16px;
+    }
+
+    .modal {
+        border-radius: var(--radius-md);
+    }
+
+    .datatable-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .datatable-search {
+        width: 100%;
+    }
+
+    .form-grid,
+    .form-grid-3 {
+        grid-template-columns: 1fr !important;
+    }
+
+    .footer-content {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .landing-hero-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .landing-hero-buttons .landing-btn {
+        width: 100%;
+        max-width: 300px;
+    }
+
+    .topbar-user-info {
+        display: none;
+    }
+}
+
+/* ── Very small (max 360px) ── */
+@media (max-width: 360px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .landing-hero-title {
+        font-size: 1.6rem;
+    }
+
+    .auth-card {
+        padding: 20px 14px;
+    }
+}

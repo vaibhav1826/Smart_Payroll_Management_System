@@ -12,4 +12,21 @@ export default defineConfig({
       },
     },
   },
+  build: {
+    chunkSizeWarningLimit: 600,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          // React core — always needed
+          'vendor-react': ['react', 'react-dom', 'react-router-dom'],
+          // Charts — only loaded on dashboard/reports pages
+          'vendor-recharts': ['recharts'],
+          // PDF/Excel — only loaded on payroll/reports pages
+          'vendor-export': ['jspdf', 'jspdf-autotable', 'xlsx'],
+          // Toast notifications
+          'vendor-toast': ['react-hot-toast'],
+        },
+      },
+    },
+  },
 })

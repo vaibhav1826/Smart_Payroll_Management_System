@@ -1,0 +1,9 @@
+# Frontend-specific ignores (supplements root .gitignore)
+.env
+.env.*
+!.env.example
+
+node_modules/
+dist/
+.vite/
+*.local
