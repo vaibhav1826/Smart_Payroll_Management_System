@@ -238,6 +238,43 @@
     font-weight: 800;
     color: var(--text-primary);
     white-space: nowrap;
+    line-height: 1.3;
+}
+
+/* Brand text wrapper (name + role badge) */
+.sidebar-brand-text {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    overflow: hidden;
+}
+
+/* Role chip under brand name */
+.sidebar-role-badge {
+    display: inline-block;
+    font-size: 9px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 2px 8px;
+    border-radius: 20px;
+    white-space: nowrap;
+    width: fit-content;
+}
+
+/* Icon inside nav link */
+.sidebar-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+}
+
+/* Section spacing */
+.sidebar-section {
+    margin-bottom: 4px;
 }
 
 /* ── Sidebar Toggle ── */

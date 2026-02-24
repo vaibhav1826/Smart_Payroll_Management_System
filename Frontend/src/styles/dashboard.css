@@ -20,8 +20,7 @@
     background: var(--bg-white);
     border: 1px solid var(--border-light);
     border-radius: var(--radius-md);
-    border-left: 4px solid var(--border);
-    padding: 20px 20px 18px;
+    padding: 18px 20px;
     box-shadow: var(--shadow-sm);
     transition: transform var(--transition), box-shadow var(--transition);
     cursor: default;
@@ -32,94 +31,46 @@
     box-shadow: var(--shadow);
 }
 
-/* Color left borders */
-.stat-red {
-    border-left-color: var(--red);
-}
-
-.stat-green {
-    border-left-color: var(--success);
-}
-
-.stat-yellow {
-    border-left-color: var(--warning);
-}
-
-.stat-blue {
-    border-left-color: var(--info);
-}
-
-.stat-purple {
-    border-left-color: var(--purple);
-}
-
-.stat-cyan {
-    border-left-color: var(--cyan);
-}
-
-/* ── Stat Card Body ── */
-.stat-body {
+/* ── Stat Card Body (flex row: text + icon) ── */
+.stat-card-body {
     display: flex;
-    flex-direction: column;
-    gap: 4px;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
 }
 
-.stat-label {
+.stat-card-label {
     font-size: 11px;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.09em;
     color: var(--text-muted);
-    margin: 0;
+    margin-bottom: 6px;
 }
 
-.stat-value {
-    font-size: 2rem;
+.stat-card-value {
+    font-size: 1.8rem;
     font-weight: 800;
-    color: var(--text-primary);
     line-height: 1.1;
-    margin: 4px 0 0;
     font-variant-numeric: tabular-nums;
 }
 
-.stat-trend {
+.stat-card-sub {
     font-size: 11px;
-    font-weight: 600;
-    margin: 0;
-    line-height: 1;
+    color: var(--text-muted);
+    margin-top: 4px;
 }
 
-.stat-trend.up {
-    color: var(--success);
-}
-
-.stat-trend.down {
-    color: var(--danger);
-}
-
-/* Colour overrides for stat-value */
-.stat-red .stat-value {
-    color: var(--red);
-}
-
-.stat-green .stat-value {
-    color: var(--success);
-}
-
-.stat-yellow .stat-value {
-    color: var(--warning);
-}
-
-.stat-blue .stat-value {
-    color: var(--info);
-}
-
-.stat-purple .stat-value {
-    color: var(--purple);
-}
-
-.stat-cyan .stat-value {
-    color: var(--cyan);
+/* ── Icon badge in stat card top-right ── */
+.stat-card-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: var(--radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
 }
 
 /* ── Chart Card ── */

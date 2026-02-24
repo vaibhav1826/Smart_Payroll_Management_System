@@ -8,7 +8,7 @@ import ConfirmDialog from '../../components/ConfirmDialog';
 import StatusBadge from '../../components/StatusBadge';
 import toast from 'react-hot-toast';
 
-const EMPTY = { name: '', startTime: '09:00', endTime: '18:00', breakDuration: 30, isActive: true };
+const EMPTY = { name: '', startTime: '09:00', endTime: '18:00', breakDuration: 30, requiredEmployees: 1, isActive: true };
 
 export default function ShiftManagement() {
     const { data, loading, refresh } = useFetch('/shifts');
@@ -42,10 +42,11 @@ export default function ShiftManagement() {
     };
 
     const cols = [
-        { key: 'name', label: 'Name' },
+        { key: 'name', label: 'Shift Name' },
         { key: 'startTime', label: 'Start' },
         { key: 'endTime', label: 'End' },
         { key: 'breakDuration', label: 'Break (min)' },
+        { key: 'requiredEmployees', label: 'Req. Staff', render: r => <strong>{r.requiredEmployees || 1}</strong> },
         { key: 'isActive', label: 'Active', render: r => <StatusBadge value={r.isActive ? 'active' : 'inactive'} /> },
         {
             key: 'actions', label: '', sortable: false, render: r => (
@@ -74,6 +75,7 @@ export default function ShiftManagement() {
                             <FormField label="Start Time" name="startTime" value={form.startTime} onChange={onChange} />
                             <FormField label="End Time" name="endTime" value={form.endTime} onChange={onChange} />
                             <FormField label="Break (min)" name="breakDuration" type="number" value={form.breakDuration} onChange={onChange} />
+                            <FormField label="Required Employees" name="requiredEmployees" type="number" value={form.requiredEmployees} onChange={onChange} placeholder="e.g. 10" />
                         </div>
                         <div className="form-actions">
                             <button type="button" className="btn btn-ghost" onClick={closeModal}>Cancel</button>
