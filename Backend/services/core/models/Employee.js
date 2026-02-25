@@ -10,9 +10,16 @@ const employeeSchema = new mongoose.Schema(
         salary: { type: Number, default: 0, min: 0 },
         joiningDate: { type: Date, default: Date.now },
         status: { type: String, enum: ['active', 'inactive'], default: 'active' },
+        shiftType: { type: String, enum: ['8hr', '12hr', 'custom'], default: '8hr' },
         supervisor: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
         industry: { type: mongoose.Schema.Types.ObjectId, ref: 'Industry' },
         contractor: { type: mongoose.Schema.Types.ObjectId, ref: 'Contractor' },
+        // Compliance fields
+        esicNo: { type: String, trim: true, default: '' },
+        pfNo: { type: String, trim: true, default: '' },
+        uanNo: { type: String, trim: true, default: '' },
+        aadhaarNo: { type: String, trim: true, default: '' },
+        panNo: { type: String, trim: true, default: '' },
         bankDetails: {
             bankName: { type: String, default: '' },
             accountNumber: { type: String, default: '' },

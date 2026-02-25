@@ -1,0 +1,252 @@
+Smart Payroll Management System — Enterprise Architecture Plan
+Full enterprise rebuild: microservices backend, professional React frontend, 13 functional modules.
+
+System Architecture
+React Frontend :3000
+API Gateway :4000
+Auth Service :4001
+Core Service :4002
+Operations Service :4003
+Finance Service :4004
+Platform Service :4005
+MongoDB
+Service	Port	Modules
+Gateway	4000	Proxies all /api/* routes, CORS, rate-limiting
+Auth	4001	Registration, Login, JWT, RBAC, Sessions
+Core	4002	Employee, Contractor, Industry, Supervisor
+Operations	4003	Attendance, Leave, Shifts
+Finance	4004	Payroll, Salary Slips
+Platform	4005	Notifications, Reports, Audit Logs
+Backend Directory Structure
+Backend/
+├── gateway/
+│   ├── index.js              # Gateway entry — proxy to services
+│   └── package.json
+├── services/
+│   ├── auth/
+│   │   ├── index.js
+│   │   ├── routes/
+│   │   │   └── authRoutes.js      # login, register, me, logout, refresh
+│   │   ├── controllers/
+│   │   │   └── authController.js
+│   │   ├── models/
+│   │   │   └── User.js
+│   │   ├── middleware/
+│   │   │   └── verifyToken.js
+│   │   └── package.json
+│   ├── core/
+│   │   ├── index.js
+│   │   ├── routes/
+│   │   │   ├── employeeRoutes.js
+│   │   │   ├── contractorRoutes.js
+│   │   │   ├── industryRoutes.js
+│   │   │   └── supervisorRoutes.js
+│   │   ├── controllers/
+│   │   ├── models/
+│   │   │   ├── Employee.js
+│   │   │   ├── Contractor.js
+│   │   │   ├── Industry.js
+│   │   │   └── Supervisor.js
+│   │   └── package.json
+│   ├── operations/
+│   │   ├── index.js
+│   │   ├── routes/
+│   │   │   ├── attendanceRoutes.js
+│   │   │   ├── leaveRoutes.js
+│   │   │   └── shiftRoutes.js
+│   │   ├── controllers/
+│   │   ├── models/
+│   │   │   ├── Attendance.js
+│   │   │   ├── Leave.js
+│   │   │   └── Shift.js
+│   │   └── package.json
+│   ├── finance/
+│   │   ├── index.js
+│   │   ├── routes/
+│   │   │   ├── payrollRoutes.js
+│   │   │   └── salarySlipRoutes.js
+│   │   ├── controllers/
+│   │   ├── models/
+│   │   │   ├── Payroll.js
+│   │   │   ├── SalaryStructure.js
+│   │   │   └── SalarySlip.js
+│   │   └── package.json
+│   └── platform/
+│       ├── index.js
+│       ├── routes/
+│       │   ├── notificationRoutes.js
+│       │   ├── reportRoutes.js
+│       │   └── auditRoutes.js
+│       ├── controllers/
+│       ├── models/
+│       │   ├── Notification.js
+│       │   ├── AuditLog.js
+│       │   └── Report.js
+│       └── package.json
+└── shared/
+    ├── middleware/
+    │   ├── authMiddleware.js   # JWT verify — shared across services
+    │   ├── errorHandler.js
+    │   └── auditLogger.js     # Auto-logs every mutation
+    ├── utils/
+    │   ├── db.js              # MongoDB connect helper
+    │   ├── response.js        # Standardized API responses
+    │   └── validators.js
+    └── config.js              # Env vars, JWT secret, DB URI
+Frontend Directory Structure
+Frontend/src/
+├── main.jsx
+├── App.jsx                    # Router setup
+├── styles/
+│   ├── global.css
+│   ├── layout.css
+│   ├── dashboard.css
+│   ├── forms.css
+│   ├── tables.css
+│   └── components.css
+├── layouts/
+│   ├── PublicLayout.jsx       # Home, About, Contact (no sidebar)
+│   └── DashboardLayout.jsx   # Sidebar + topbar (post-login)
+├── components/
+│   ├── Sidebar.jsx
+│   ├── Topbar.jsx
+│   ├── Logo.jsx
+│   ├── Footer.jsx
+│   ├── DataTable.jsx          # Reusable sortable table
+│   ├── Modal.jsx              # Reusable modal
+│   ├── FormField.jsx          # Reusable form input
+│   ├── StatusBadge.jsx
+│   ├── StatCard.jsx
+│   ├── ChartCard.jsx
+│   ├── Notification.jsx
+│   ├── ConfirmDialog.jsx
+│   ├── LoadingSpinner.jsx
+│   ├── SearchBar.jsx
+│   ├── GalaxyBackground.jsx
+│   └── InactivityModal.jsx
+├── pages/
+│   ├── public/
+│   │   ├── Home.jsx
+│   │   ├── About.jsx
+│   │   ├── Contact.jsx
+│   │   ├── Login.jsx
+│   │   └── Register.jsx
+│   ├── dashboard/
+│   │   ├── AdminDashboard.jsx
+│   │   ├── SupervisorDashboard.jsx
+│   │   └── EmployeeDashboard.jsx
+│   ├── industry/
+│   │   ├── IndustryList.jsx
+│   │   └── IndustryForm.jsx
+│   ├── contractor/
+│   │   ├── ContractorList.jsx
+│   │   └── ContractorForm.jsx
+│   ├── employee/
+│   │   ├── EmployeeList.jsx
+│   │   └── EmployeeForm.jsx
+│   ├── supervisor/
+│   │   ├── SupervisorList.jsx
+│   │   └── SupervisorForm.jsx
+│   ├── attendance/
+│   │   ├── AttendanceMark.jsx
+│   │   ├── AttendanceBulk.jsx
+│   │   └── ShiftManagement.jsx
+│   ├── leave/
+│   │   ├── LeaveApply.jsx
+│   │   ├── LeaveApproval.jsx
+│   │   └── LeaveBalance.jsx
+│   ├── payroll/
+│   │   ├── PayrollGenerate.jsx
+│   │   ├── SalaryStructure.jsx
+│   │   ├── PayrollHistory.jsx
+│   │   └── SalarySlip.jsx
+│   ├── reports/
+│   │   └── Reports.jsx
+│   └── audit/
+│       └── AuditLogs.jsx
+├── hooks/
+│   ├── useAuth.js
+│   ├── useFetch.js
+│   └── useNotifications.js
+├── context/
+│   ├── AuthContext.jsx
+│   └── NotificationContext.jsx
+└── utils/
+    ├── api.js                 # Fetch wrapper
+    ├── formatters.js          # Date, currency formatters
+    └── exportUtils.js         # PDF, CSV, Excel export
+Data Models (Key Fields)
+User
+email, password(hashed), name, role(admin|supervisor|employee|contractor), phone, avatar, isActive
+
+Industry
+name, code, description, address, contactPerson, contactPhone, status(active|inactive), createdBy
+
+Contractor
+name, email, phone, company, industry(ref), employees[ref], status, createdBy
+
+Employee
+name, email, phone, department, designation, salary, joiningDate, status(active|inactive), supervisor(ref), industry(ref), contractor(ref), bankDetails, emergencyContact, addedBy
+
+Supervisor
+user(ref), industry(ref), employees[ref], department
+
+Attendance
+employee(ref), date, status(present|absent|halfDay|leave), checkIn, checkOut, shift(ref), overtime, markedBy
+
+Shift
+name, startTime, endTime, breakDuration, isActive
+
+Leave
+employee(ref), type(sick|casual|earned|unpaid), startDate, endDate, days, reason, status(pending|approved|rejected), approvedBy, appliedAt
+
+Payroll
+employee(ref), month, year, basicSalary, allowances, deductions, overtime, leaveDays, netPay, status(draft|generated|locked), generatedAt, lockedAt
+
+SalaryStructure
+designation, basicPercent, hraPercent, daPercent, pfPercent, otherAllowances
+
+Notification
+user(ref), title, message, type(info|warning|success|error), isRead, link, createdAt
+
+AuditLog
+user(ref), action, module, targetId, changes(before/after), ip, timestamp
+
+Execution Strategy
+IMPORTANT
+
+This system has ~50+ backend files and ~40+ frontend files. I will build it in phases, delivering working functionality at each phase. Each phase builds on the previous one.
+
+Phase 1 — Foundation (this step)
+Scaffold all 6 backend services + gateway
+Restructure frontend with React Router + sidebar layout
+Auth service: registration + login + RBAC + JWT
+Reusable frontend components (DataTable, Modal, FormField, etc.)
+Phase 2 — Core CRUD
+Industry, Contractor, Employee, Supervisor full CRUD
+All 4 list/form pages in frontend
+Assignments (employee↔supervisor, contractor↔industry, etc.)
+Phase 3 — Operations
+Attendance marking + bulk entry + shift management
+Leave apply/approve/balance
+Check-in/check-out + overtime calculation
+Phase 4 — Finance
+Salary structure config
+Auto-calculation based on attendance + leaves
+Payroll generation + locking
+PDF salary slips
+Phase 5 — Platform
+In-app notification system
+Reports with PDF/CSV/Excel export
+Audit logging middleware
+Phase 6 — Dashboards
+Admin/Supervisor/Employee dashboards with charts
+Attendance & payroll analytics
+Verification Plan
+Per-Phase Testing
+Start each service independently → verify health endpoint
+Test all CRUD endpoints via curl
+Test frontend pages in browser after each module
+End-to-End
+Full user journey: Register → Login → Create Industry → Add Contractor → Add Employee → Mark Attendance → Generate Payroll → Download Salary Slip
+Verify data in MongoDB Compass at each step

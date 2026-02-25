@@ -16,6 +16,7 @@ app.use('/api/industries', require('./routes/industryRoutes'));
 app.use('/api/contractors', require('./routes/contractorRoutes'));
 app.use('/api/employees', require('./routes/employeeRoutes'));
 app.use('/api/supervisors', require('./routes/supervisorRoutes'));
+app.use('/api/managers', require('./routes/managerRoutes'));
 
 app.use(errorHandler);
 

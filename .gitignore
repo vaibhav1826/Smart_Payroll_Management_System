@@ -1,0 +1,96 @@
+# ── Environment / Secrets (NEVER commit these) ──────────────
+.env
+.env.local
+.env.development
+.env.development.local
+.env.test
+.env.test.local
+.env.production
+.env.production.local
+.env.staging
+
+# Backend service .env files
+Backend/.env
+Backend/services/**/.env
+Backend/gateway/.env
+
+# Frontend env
+Frontend/.env
+Frontend/.env.*
+
+# ── Dependencies ─────────────────────────────────────────────
+node_modules/
+.pnp
+.pnp.js
+
+# ── Build Output ─────────────────────────────────────────────
+dist/
+build/
+out/
+.output/
+Frontend/dist/
+Backend/dist/
+
+# ── Logs ─────────────────────────────────────────────────────
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ── Runtime ──────────────────────────────────────────────────
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# ── Coverage / Tests ─────────────────────────────────────────
+coverage/
+*.lcov
+.nyc_output/
+
+# ── Vite / Build Caches ──────────────────────────────────────
+.vite/
+vite.config.js.timestamp-*
+*.local
+
+# ── OS Files ─────────────────────────────────────────────────
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+ehthumbs.db
+desktop.ini
+
+# ── IDE / Editor ─────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.project
+.classpath
+
+# ── MongoDB / Database dumps ─────────────────────────────────
+*.dump
+*.bson
+dump/
+
+# ── SSL Certificates ─────────────────────────────────────────
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+
+# ── Misc ─────────────────────────────────────────────────────
+.cache/
+.temp/
+tmp/
