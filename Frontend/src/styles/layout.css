@@ -4,21 +4,24 @@
 
 /* ── Public Navbar ── */
 .public-nav {
-    background: var(--bg-white);
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border-bottom: 2px solid var(--red);
     position: sticky;
     top: 0;
     z-index: var(--z-sticky);
-    height: 64px;
+    height: 72px;
     display: flex;
     align-items: center;
     box-shadow: var(--shadow-sm);
+    transition: all var(--transition);
 }
 
 .public-nav-inner {
     max-width: 1280px;
     margin: 0 auto;
-    padding: 0 32px;
+    padding: 0 40px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -28,19 +31,19 @@
 .public-nav-brand {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 14px;
     text-decoration: none;
 }
 
 .public-nav-brand img,
 .public-nav-brand svg {
-    width: 40px;
-    height: 40px;
+    width: 44px;
+    height: 44px;
     object-fit: contain;
 }
 
 .public-nav-brand-name {
-    font-size: 1.1rem;
+    font-size: 1.25rem;
     font-weight: 800;
     color: var(--text-primary);
     letter-spacing: -0.3px;
@@ -53,14 +56,14 @@
 .public-nav-links {
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: 8px;
 }
 
 .public-nav-link {
-    font-size: 13.5px;
+    font-size: 14px;
     font-weight: 500;
     color: var(--text-secondary);
-    padding: 7px 14px;
+    padding: 8px 16px;
     border-radius: var(--radius);
     text-decoration: none;
     transition: all var(--transition);
@@ -286,16 +289,16 @@
 /* ── Sidebar Nav ── */
 .sidebar-nav {
     flex: 1;
-    padding: 12px 8px;
+    padding: 16px 12px;
 }
 
 .sidebar-section-label {
     font-size: 10px;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.12em;
     color: var(--text-light);
-    padding: 14px 10px 5px;
+    padding: 14px 12px 6px;
     white-space: nowrap;
     overflow: hidden;
 }
@@ -303,40 +306,32 @@
 .sidebar-link {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 8px 10px;
-    border-radius: var(--radius);
-    font-size: 13px;
+    gap: 12px;
+    padding: 9px 12px;
+    border-radius: var(--radius-md);
+    font-size: 13.5px;
     font-weight: 500;
     color: var(--text-secondary);
     text-decoration: none;
     transition: all var(--transition);
-    margin-bottom: 2px;
+    margin-bottom: 4px;
     white-space: nowrap;
     position: relative;
+    overflow: hidden;
 }
 
 .sidebar-link:hover {
     background: var(--red-light);
     color: var(--red);
     text-decoration: none;
+    transform: translateX(2px);
 }
 
 .sidebar-link.active {
     background: var(--red-light);
     color: var(--red);
     font-weight: 600;
-}
-
-.sidebar-link.active::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 4px;
-    bottom: 4px;
-    width: 3px;
-    background: var(--red);
-    border-radius: 0 2px 2px 0;
+    box-shadow: inset 3px 0 0 0 var(--red);
 }
 
 .sidebar-label {
@@ -482,25 +477,25 @@
 .notif-dropdown,
 .user-dropdown {
     position: absolute;
-    top: calc(100% + 6px);
+    top: calc(100% + 8px);
     background: var(--bg-white);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-lg);
     box-shadow: var(--shadow-lg);
     z-index: var(--z-dropdown);
     overflow: hidden;
-    animation: slide-down 0.15s ease;
+    animation: slide-down 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @keyframes slide-down {
     from {
         opacity: 0;
-        transform: translateY(-6px);
+        transform: translateY(-8px) scale(0.98);
     }
 
     to {
         opacity: 1;
-        transform: translateY(0);
+        transform: translateY(0) scale(1);
     }
 }
 

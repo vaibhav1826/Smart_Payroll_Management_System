@@ -54,18 +54,18 @@
   --cyan: #0E7490;
   --cyan-light: rgba(14, 116, 144, 0.08);
 
-  /* Shadows */
-  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.06);
-  --shadow-sm: 0 1px 4px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
-  --shadow: 0 4px 16px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.04);
-  --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.1), 0 4px 8px rgba(0, 0, 0, 0.04);
+  /* Shadows (Softer, modern SaaS style) */
+  --shadow-xs: 0 1px 2px rgba(17, 24, 39, 0.04);
+  --shadow-sm: 0 2px 8px rgba(17, 24, 39, 0.04), 0 1px 3px rgba(17, 24, 39, 0.02);
+  --shadow: 0 8px 24px rgba(17, 24, 39, 0.06), 0 4px 8px rgba(17, 24, 39, 0.03);
+  --shadow-lg: 0 16px 48px rgba(17, 24, 39, 0.08), 0 6px 12px rgba(17, 24, 39, 0.04);
 
   /* Radius */
-  --radius-sm: 4px;
+  --radius-sm: 6px;
   --radius: 8px;
-  --radius-md: 10px;
-  --radius-lg: 14px;
-  --radius-xl: 20px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
 
   /* Z-index scale */
   --z-base: 1;
@@ -77,7 +77,7 @@
   --z-spinner: 400;
   --z-toast: 9999;
 
-  --transition: 0.2s ease;
+  --transition: 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 /* ── Reset ── */
@@ -105,11 +105,11 @@ body {
 a {
   color: var(--red);
   text-decoration: none;
+  transition: color var(--transition);
 }
 
 a:hover {
   color: var(--red-hover);
-  text-decoration: underline;
 }
 
 /* ── Typography ── */
@@ -121,6 +121,7 @@ h5 {
   font-weight: 700;
   line-height: 1.3;
   color: var(--text-primary);
+  letter-spacing: -0.02em;
 }
 
 h1 {
@@ -144,13 +145,22 @@ p {
   line-height: 1.7;
 }
 
+/* ── Utility Classes ── */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
 /* ── Card ── */
 .card {
   background: var(--bg-white);
   border: 1px solid var(--border-light);
   border-radius: var(--radius-md);
-  padding: 20px;
+  padding: 24px;
   box-shadow: var(--shadow-sm);
+  transition: transform var(--transition), box-shadow var(--transition);
 }
 
 /* ── Buttons ── */
@@ -158,8 +168,8 @@ p {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
-  padding: 9px 18px;
+  gap: 8px;
+  padding: 10px 20px;
   border-radius: var(--radius);
   font-size: 13.5px;
   font-weight: 600;
@@ -173,47 +183,47 @@ p {
   letter-spacing: 0.01em;
 }
 
-.btn:hover {
-  transform: translateY(-1px);
-}
-
 .btn:active {
-  transform: none;
+  transform: scale(0.98);
 }
 
 .btn-primary {
   background: var(--red);
   color: #fff;
   border-color: var(--red);
+  box-shadow: 0 4px 12px rgba(204, 0, 0, 0.15);
 }
 
 .btn-primary:hover {
   background: var(--red-hover);
   border-color: var(--red-hover);
-  box-shadow: 0 4px 14px rgba(204, 0, 0, 0.3);
+  box-shadow: 0 6px 16px rgba(204, 0, 0, 0.25);
+  transform: translateY(-1px);
 }
 
 .btn-secondary {
   background: var(--bg-white);
   color: var(--text-primary);
   border-color: var(--border);
+  box-shadow: var(--shadow-xs);
 }
 
 .btn-secondary:hover {
   border-color: var(--red);
   color: var(--red);
+  background: var(--red-light);
+  transform: translateY(-1px);
 }
 
 .btn-ghost {
   background: transparent;
   color: var(--text-secondary);
-  border-color: var(--border);
+  border-color: transparent;
 }
 
 .btn-ghost:hover {
   background: var(--bg-subtle);
   color: var(--text-primary);
-  border-color: var(--border);
 }
 
 .btn-danger {
@@ -225,17 +235,21 @@ p {
 .btn-danger:hover {
   background: var(--danger-light);
   border-color: var(--danger);
+  transform: translateY(-1px);
 }
 
 .btn-success {
   background: var(--success);
   color: #fff;
   border-color: var(--success);
+  box-shadow: 0 4px 12px rgba(22, 163, 74, 0.15);
 }
 
 .btn-success:hover {
   background: #15803d;
   border-color: #15803d;
+  box-shadow: 0 6px 16px rgba(22, 163, 74, 0.25);
+  transform: translateY(-1px);
 }
 
 .btn-warning {
@@ -246,16 +260,17 @@ p {
 
 .btn-warning:hover {
   background: #FDE68A;
+  transform: translateY(-1px);
 }
 
 .btn-sm {
-  padding: 5px 12px;
+  padding: 6px 14px;
   font-size: 12px;
   border-radius: var(--radius-sm);
 }
 
 .btn-lg {
-  padding: 12px 28px;
+  padding: 14px 32px;
   font-size: 15px;
 }
 
