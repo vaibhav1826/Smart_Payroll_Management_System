@@ -20,30 +20,18 @@ const ManagerDashboard = lazy(() => import('./pages/dashboard/ManagerDashboard')
 const SupervisorDashboard = lazy(() => import('./pages/dashboard/SupervisorDashboard'));
 
 // ── Organisation ──────────────────────────────────────────────────────────────
-const IndustryList = lazy(() => import('./pages/industry/IndustryList'));
-const ManagerList = lazy(() => import('./pages/manager/ManagerList'));
-const SupervisorList = lazy(() => import('./pages/supervisor/SupervisorList'));
 const EmployeeList = lazy(() => import('./pages/employee/EmployeeList'));
-const ContractorList = lazy(() => import('./pages/contractor/ContractorList'));
 
 // ── Operations ────────────────────────────────────────────────────────────────
 const AttendanceMark = lazy(() => import('./pages/attendance/AttendanceMark'));
 const AttendanceBulk = lazy(() => import('./pages/attendance/AttendanceBulk'));
 const ShiftManagement = lazy(() => import('./pages/attendance/ShiftManagement'));
-const LeaveApply = lazy(() => import('./pages/leave/LeaveApply'));
-const LeaveApproval = lazy(() => import('./pages/leave/LeaveApproval'));
-const LeaveBalance = lazy(() => import('./pages/leave/LeaveBalance'));
 
 // ── Finance ───────────────────────────────────────────────────────────────────
-const SalaryStructure = lazy(() => import('./pages/payroll/SalaryStructure'));
 const PayrollGenerate = lazy(() => import('./pages/payroll/PayrollGenerate'));
-const PayrollHistory = lazy(() => import('./pages/payroll/PayrollHistory'));
-const SalarySlip = lazy(() => import('./pages/payroll/SalarySlip'));
 
 // ── Platform ──────────────────────────────────────────────────────────────────
-const Reports = lazy(() => import('./pages/reports/Reports'));
 const AuditLogs = lazy(() => import('./pages/audit/AuditLogs'));
-const SubscriptionPage = lazy(() => import('./pages/admin/SubscriptionPage'));
 
 // ── CSS ───────────────────────────────────────────────────────────────────────
 import './styles/global.css';
@@ -119,30 +107,18 @@ export default function App() {
             <Route path="dashboard" element={<Page><RoleDashboard /></Page>} />
 
             {/* Organisation — admin + manager */}
-            <Route path="industries" element={<Page><AdminOnly><IndustryList /></AdminOnly></Page>} />
-            <Route path="managers" element={<Page><AdminOnly><ManagerList /></AdminOnly></Page>} />
-            <Route path="contractors" element={<Page><AdminOnly><ContractorList /></AdminOnly></Page>} />
-            <Route path="supervisors" element={<Page><AdminOrManager><SupervisorList /></AdminOrManager></Page>} />
             <Route path="employees" element={<Page><AdminOrManager><EmployeeList /></AdminOrManager></Page>} />
 
             {/* Operations */}
             <Route path="attendance" element={<Page><AttendanceMark /></Page>} />
             <Route path="attendance/bulk" element={<Page><AttendanceBulk /></Page>} />
             <Route path="shifts" element={<Page><AdminOnly><ShiftManagement /></AdminOnly></Page>} />
-            <Route path="leaves" element={<Page><LeaveApply /></Page>} />
-            <Route path="leaves/approval" element={<Page><LeaveApproval /></Page>} />
-            <Route path="leaves/balance" element={<Page><LeaveBalance /></Page>} />
 
             {/* Finance */}
-            <Route path="salary-structures" element={<Page><AdminOnly><SalaryStructure /></AdminOnly></Page>} />
             <Route path="payroll" element={<Page><AdminOnly><PayrollGenerate /></AdminOnly></Page>} />
-            <Route path="payroll/history" element={<Page><PayrollHistory /></Page>} />
-            <Route path="salary-slips" element={<Page><SalarySlip /></Page>} />
 
             {/* Platform */}
-            <Route path="reports" element={<Page><Reports /></Page>} />
             <Route path="audit-logs" element={<Page><AdminOnly><AuditLogs /></AdminOnly></Page>} />
-            <Route path="subscription" element={<Page><AdminOnly><SubscriptionPage /></AdminOnly></Page>} />
           </Route>
 
           <Route path="*" element={<Navigate to="/" replace />} />
