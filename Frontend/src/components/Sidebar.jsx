@@ -36,13 +36,9 @@ const ADMIN_SECTIONS = [
         ],
     },
     {
-        label: 'Organisation',
+        label: 'Core Management',
         links: [
-            { to: '/industries', label: 'Industries', icon: Icon.industry },
-            { to: '/managers', label: 'Managers', icon: Icon.manager },
-            { to: '/supervisors', label: 'Supervisors', icon: Icon.supervisor },
-            { to: '/employees', label: 'Employees', icon: Icon.employee },
-            { to: '/contractors', label: 'Contractors', icon: Icon.contractor },
+            { to: '/employees', label: 'Employee Core', icon: Icon.employee },
         ],
     },
     {
@@ -51,26 +47,18 @@ const ADMIN_SECTIONS = [
             { to: '/attendance', label: 'Attendance', icon: Icon.attendance },
             { to: '/attendance/bulk', label: 'Bulk Entry', icon: Icon.bulk },
             { to: '/shifts', label: 'Shifts', icon: Icon.shift },
-            { to: '/leaves', label: 'Leave Apply', icon: Icon.leave },
-            { to: '/leaves/approval', label: 'Leave Approvals', icon: Icon.approval },
-            { to: '/leaves/balance', label: 'Leave Balance', icon: Icon.balance },
         ],
     },
     {
         label: 'Finance',
         links: [
-            { to: '/salary-structures', label: 'Salary Structures', icon: Icon.salary },
-            { to: '/payroll', label: 'Generate Payroll', icon: Icon.payroll },
-            { to: '/payroll/history', label: 'Payroll History', icon: Icon.history },
-            { to: '/salary-slips', label: 'Salary Slips', icon: Icon.slip },
+            { to: '/payroll', label: 'Salary Management', icon: Icon.payroll },
         ],
     },
     {
         label: 'Platform',
         links: [
-            { to: '/reports', label: 'Reports', icon: Icon.reports },
             { to: '/audit-logs', label: 'Audit Logs', icon: Icon.audit },
-            { to: '/subscription', label: 'Subscription', icon: Icon.subscription },
         ],
     },
 ];
@@ -83,31 +71,15 @@ const MANAGER_SECTIONS = [
         ],
     },
     {
-        label: 'Organisation',
+        label: 'Core Management',
         links: [
-            { to: '/supervisors', label: 'Supervisors', icon: Icon.supervisor },
-            { to: '/employees', label: 'Employees', icon: Icon.employee },
+            { to: '/employees', label: 'Employee Core', icon: Icon.employee },
         ],
     },
     {
         label: 'Operations',
         links: [
             { to: '/attendance', label: 'Attendance', icon: Icon.attendance },
-            { to: '/leaves/approval', label: 'Leave Approvals', icon: Icon.approval },
-            { to: '/leaves/balance', label: 'Leave Balance', icon: Icon.balance },
-        ],
-    },
-    {
-        label: 'Finance',
-        links: [
-            { to: '/payroll/history', label: 'Payroll History', icon: Icon.history },
-            { to: '/salary-slips', label: 'Salary Slips', icon: Icon.slip },
-        ],
-    },
-    {
-        label: 'Reports',
-        links: [
-            { to: '/reports', label: 'Reports', icon: Icon.reports },
         ],
     },
 ];
@@ -123,15 +95,6 @@ const SUPERVISOR_SECTIONS = [
         label: 'Operations',
         links: [
             { to: '/attendance', label: 'Attendance', icon: Icon.attendance },
-            { to: '/leaves', label: 'Leave Apply', icon: Icon.leave },
-            { to: '/leaves/approval', label: 'Leave Approvals', icon: Icon.approval },
-            { to: '/leaves/balance', label: 'Leave Balance', icon: Icon.balance },
-        ],
-    },
-    {
-        label: 'Finance',
-        links: [
-            { to: '/salary-slips', label: 'Salary Slips', icon: Icon.slip },
         ],
     },
 ];

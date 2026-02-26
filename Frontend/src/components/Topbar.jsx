@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useNotifications } from '../context/NotificationContext';
+import toast from 'react-hot-toast';
 
 const BREADCRUMB_MAP = {
     '/dashboard': 'Dashboard',
@@ -43,7 +44,7 @@ function BellIcon() {
 export default function Topbar({ sidebarOpen, onSidebarToggle }) {
     const location = useLocation();
     const navigate = useNavigate();
-    const { user, logout } = useAuth();
+    const { user, logout, updateProfile } = useAuth();
     const { notifications, unreadCount, markAllRead } = useNotifications();
 
     const [notifOpen, setNotifOpen] = useState(false);
@@ -126,6 +127,7 @@ export default function Topbar({ sidebarOpen, onSidebarToggle }) {
                 {/* User menu */}
                 <div className="topbar-user" ref={userRef} onClick={() => { setUserOpen(v => !v); setNotifOpen(false); }}>
                     <div className="topbar-avatar">{initials}</div>
+
                     <div className="topbar-user-info">
                         <div className="topbar-user-name">{user?.name || 'User'}</div>
                         <div
@@ -146,7 +148,7 @@ export default function Topbar({ sidebarOpen, onSidebarToggle }) {
                     </div>
 
                     {userOpen && (
-                        <div className="user-dropdown">
+                        <div className="user-dropdown" onClick={e => e.stopPropagation()}>
                             <div className="user-dropdown-header">
                                 <div style={{ fontWeight: 600, fontSize: 14 }}>{user?.name}</div>
                                 <div className="text-muted text-sm">{user?.email}</div>
