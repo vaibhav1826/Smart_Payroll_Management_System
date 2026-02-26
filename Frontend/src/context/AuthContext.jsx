@@ -62,13 +62,19 @@ export function AuthProvider({ children }) {
         resetTimer();
     };
 
+    const updateProfile = async (updates) => {
+        const data = await api.put('/auth/profile', updates);
+        setUser(data.user);
+        return data.user;
+    };
+
     const forceLogout = async () => {
         await logout();
         setShowInactivityModal(false);
     };
 
     return (
-        <AuthContext.Provider value={{ user, loading, login, logout, register, showInactivityModal, continueSession, forceLogout }}>
+        <AuthContext.Provider value={{ user, loading, login, logout, register, updateProfile, showInactivityModal, continueSession, forceLogout }}>
             {children}
         </AuthContext.Provider>
     );
