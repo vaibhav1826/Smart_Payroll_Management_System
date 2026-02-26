@@ -3,18 +3,16 @@ const { success, fail, serverError } = require('../../../shared/utils/response')
 
 exports.list = async (req, res) => {
     try {
-        const { search, status, department, industry, contractor, supervisor } = req.query;
+        const { search, status, department, manager, supervisor } = req.query;
         const filter = {};
         if (status) filter.status = status;
         if (department) filter.department = new RegExp(department, 'i');
-        if (industry) filter.industry = industry;
-        if (contractor) filter.contractor = contractor;
+        if (manager) filter.manager = manager;
         if (supervisor) filter.supervisor = supervisor;
         if (search) { const r = new RegExp(search, 'i'); filter.$or = [{ name: r }, { email: r }, { designation: r }, { department: r }]; }
         const employees = await Employee.find(filter)
+            .populate('manager', 'name email')
             .populate('supervisor', 'name email')
-            .populate('industry', 'name code')
-            .populate('contractor', 'name company')
             .populate('addedBy', 'name email')
             .sort({ createdAt: -1 });
         return success(res, { employees });
@@ -24,9 +22,8 @@ exports.list = async (req, res) => {
 exports.getOne = async (req, res) => {
     try {
         const employee = await Employee.findById(req.params.id)
+            .populate('manager', 'name email')
             .populate('supervisor', 'name email')
-            .populate('industry', 'name code')
-            .populate('contractor', 'name company')
             .populate('addedBy', 'name email');
         if (!employee) return fail(res, 'Employee not found.', 404);
         return success(res, { employee });
@@ -35,14 +32,24 @@ exports.getOne = async (req, res) => {
 
 exports.create = async (req, res) => {
     try {
-        const { name, email, phone, department, designation, salary, joiningDate, status, supervisor, industry, contractor, bankDetails, emergencyContact } = req.body;
+        const {
+            name, email, phone, bloodGroup, dob, gender,
+            employmentType, branch, location, joiningDate, designation, department, manager, supervisor,
+            permanentAddress, currentAddress,
+            aadhaarCard, panCard, bankDetails,
+            salary, status
+        } = req.body;
+
         if (!name || !email) return fail(res, 'Name and email are required.');
         const existing = await Employee.findOne({ email: email.trim().toLowerCase() });
         if (existing) return fail(res, 'Employee with this email already exists.', 409);
+
         const employee = await Employee.create({
-            name, email: email.trim().toLowerCase(), phone, department, designation,
-            salary: salary || 0, joiningDate: joiningDate || Date.now(), status: status || 'active',
-            supervisor, industry, contractor, bankDetails, emergencyContact,
+            name, email: email.trim().toLowerCase(), phone, bloodGroup, dob, gender,
+            employmentType, branch, location, joiningDate: joiningDate || Date.now(), designation, department, manager, supervisor,
+            permanentAddress, currentAddress,
+            aadhaarCard, panCard, bankDetails,
+            salary: salary || 0, status: status || 'active',
             addedBy: req.user.userId,
         });
         return success(res, { employee }, 'Employee created.', 201);
@@ -54,9 +61,16 @@ exports.create = async (req, res) => {
 
 exports.update = async (req, res) => {
     try {
-        const allowed = ['name', 'email', 'phone', 'department', 'designation', 'salary', 'joiningDate', 'status', 'supervisor', 'industry', 'contractor', 'bankDetails', 'emergencyContact'];
+        const allowed = [
+            'name', 'email', 'phone', 'bloodGroup', 'dob', 'gender',
+            'employmentType', 'branch', 'location', 'joiningDate', 'designation', 'department', 'manager', 'supervisor',
+            'permanentAddress', 'currentAddress',
+            'aadhaarCard', 'panCard', 'bankDetails',
+            'salary', 'status'
+        ];
         const updates = {};
         allowed.forEach(k => { if (req.body[k] !== undefined) updates[k] = req.body[k]; });
+
         if (updates.email) updates.email = updates.email.trim().toLowerCase();
         const employee = await Employee.findByIdAndUpdate(req.params.id, updates, { new: true, runValidators: true });
         if (!employee) return fail(res, 'Employee not found.', 404);

@@ -2,15 +2,11 @@ const mongoose = require('mongoose');
 const Payroll = require('../models/Payroll');
 const { success, fail, serverError } = require('../../../shared/utils/response');
 
-// We need cross-service data. Since all services share the same MongoDB,
-// we register the schemas inline if not already registered.
+// Using inline schema definitions to access cross-service collections
 function getModel(name, schemaDef) {
     return mongoose.models[name] || mongoose.model(name, new mongoose.Schema(schemaDef, { strict: false }));
 }
-const Employee = getModel('Employee', { name: String, email: String, salary: Number, designation: String, status: String });
-const Attendance = getModel('Attendance', { employee: mongoose.Schema.Types.ObjectId, date: Date, status: String, overtime: Number });
-const Leave = getModel('Leave', { employee: mongoose.Schema.Types.ObjectId, startDate: Date, endDate: Date, days: Number, status: String });
-const SalaryStructure = require('../models/SalaryStructure');
+const Employee = getModel('Employee', { name: String, email: String, salary: Number, status: String });
 
 exports.list = async (req, res) => {
     try {
@@ -20,7 +16,7 @@ exports.list = async (req, res) => {
         if (year) filter.year = Number(year);
         if (employee) filter.employee = employee;
         if (status) filter.status = status;
-        const payrolls = await Payroll.find(filter).populate('employee', 'name email department designation').populate('generatedBy', 'name').sort({ year: -1, month: -1 });
+        const payrolls = await Payroll.find(filter).populate('employee', 'name email').populate('generatedBy', 'name').sort({ year: -1, month: -1 });
         return success(res, { payrolls });
     } catch (err) { return serverError(res, err); }
 };
@@ -31,8 +27,6 @@ exports.generate = async (req, res) => {
         if (!month || !year) return fail(res, 'Month and year are required.');
 
         const employees = await Employee.find({ status: 'active' });
-        const start = new Date(year, month - 1, 1);
-        const end = new Date(year, month, 0, 23, 59, 59, 999);
         const totalDays = new Date(year, month, 0).getDate();
         const results = [];
 
@@ -40,33 +34,54 @@ exports.generate = async (req, res) => {
             const existing = await Payroll.findOne({ employee: emp._id, month, year });
             if (existing && existing.status === 'locked') continue;
 
-            const attendance = await Attendance.find({ employee: emp._id, date: { $gte: start, $lte: end } });
-            const presentDays = attendance.filter(a => a.status === 'present').length;
-            const halfDays = attendance.filter(a => a.status === 'halfDay').length;
-            const effectiveDays = presentDays + (halfDays * 0.5);
-            const overtimeHours = attendance.reduce((sum, a) => sum + (a.overtime || 0), 0);
-            const leaves = await Leave.find({ employee: emp._id, status: 'approved', startDate: { $gte: start }, endDate: { $lte: end } });
-            const leaveDays = leaves.reduce((sum, l) => sum + l.days, 0);
-
             const salary = emp.salary || 0;
-            const structure = await SalaryStructure.findOne({ designation: emp.designation }) || { basicPercent: 50, hraPercent: 20, daPercent: 10, pfPercent: 12, otherAllowances: 0 };
-            const dailyRate = salary / totalDays;
-            const basic = dailyRate * effectiveDays * (structure.basicPercent / 100);
-            const hra = dailyRate * effectiveDays * (structure.hraPercent / 100);
-            const da = dailyRate * effectiveDays * (structure.daPercent / 100);
-            const pf = dailyRate * effectiveDays * (structure.pfPercent / 100);
-            const otherAll = structure.otherAllowances || 0;
-            const overtimePay = overtimeHours * (dailyRate / 8) * 1.5;
-            const gross = basic + hra + da + otherAll + overtimePay;
-            const net = gross - pf;
+            // Simplified ratio for additions based on standard structures
+            const basicSalary = salary * 0.5;
+            const hra = salary * 0.2;
+            const da = salary * 0.1;
+            const regularBonuses = salary * 0.2; // Making up to 100% of base salary
+
+            const grossPay = basicSalary + hra + da + regularBonuses;
+
+            // Deductions
+            const pf = basicSalary * 0.12;
+            const esi = grossPay <= 21000 ? grossPay * 0.0075 : 0;
+            const tds = grossPay > 50000 ? grossPay * 0.1 : 0; // Simple TDS assumption
+
+            // Advances / Loans (dummy values 0 for automated generation unless fetched from a Loan module)
+            const advancePayment = 0;
+            const emiAdjustments = 0;
+
+            const totalDeductions = pf + esi + tds + advancePayment + emiAdjustments;
+            const netPay = grossPay - totalDeductions;
 
             const data = {
-                employee: emp._id, month, year, workingDays: totalDays, presentDays: effectiveDays,
-                leaveDays, overtimeHours, basicSalary: Math.round(basic), hra: Math.round(hra),
-                da: Math.round(da), pf: Math.round(pf), otherAllowances: Math.round(otherAll),
-                overtimePay: Math.round(overtimePay), deductions: Math.round(pf),
-                grossPay: Math.round(gross), netPay: Math.round(net),
-                status: 'generated', generatedBy: req.user.userId, generatedAt: new Date(),
+                employee: emp._id, month, year,
+                workingDays: totalDays, presentDays: totalDays, // Placeholder assuming 100% attendance
+
+                // Additions
+                basicSalary: Math.round(basicSalary),
+                hra: Math.round(hra),
+                da: Math.round(da),
+                regularBonuses: Math.round(regularBonuses),
+
+                // Deductions
+                pf: Math.round(pf),
+                esi: Math.round(esi),
+                tds: Math.round(tds),
+
+                // Advances
+                advancePayment: Math.round(advancePayment),
+                emiAdjustments: Math.round(emiAdjustments),
+
+                // Totals
+                grossPay: Math.round(grossPay),
+                totalDeductions: Math.round(totalDeductions),
+                netPay: Math.round(netPay),
+
+                status: 'generated',
+                generatedBy: req.user.userId,
+                generatedAt: new Date(),
             };
 
             const payroll = await Payroll.findOneAndUpdate({ employee: emp._id, month, year }, data, { upsert: true, new: true });

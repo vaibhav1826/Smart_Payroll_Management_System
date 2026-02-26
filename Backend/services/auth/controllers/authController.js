@@ -28,7 +28,14 @@ function safeUser(user) {
 /** POST /api/auth/register */
 exports.register = async (req, res) => {
     try {
-        const { email, password, name, role, phone } = req.body;
+        const { email, password, name, role, phone, secretKey } = req.body;
+
+        // Secret Key checking
+        const { REGISTRATION_SECRET_KEY } = require('../../../shared/config');
+        if (secretKey !== REGISTRATION_SECRET_KEY) {
+            return fail(res, 'Invalid or missing Secret Key. Registration denied.', 403);
+        }
+
         if (!email || !password || !name) return fail(res, 'Name, email, and password are required.');
         if (!isValidEmail(email)) return fail(res, 'Invalid email format.');
         if (password.length < 6) return fail(res, 'Password must be at least 6 characters.');
@@ -108,6 +115,27 @@ exports.me = async (req, res) => {
         if (!user || !user.isActive) return fail(res, 'User not found.', 401);
         return success(res, { user: safeUser(user) });
     } catch (err) {
+        return serverError(res, err);
+    }
+};
+
+/** PUT /api/auth/profile */
+exports.updateProfile = async (req, res) => {
+    try {
+        const updates = {};
+        if (req.body.name) updates.name = sanitize(req.body.name);
+        if (req.body.phone !== undefined) updates.phone = sanitize(req.body.phone);
+
+        const user = await User.findByIdAndUpdate(req.user.userId, updates, { new: true, runValidators: true });
+        if (!user || !user.isActive) return fail(res, 'User not found.', 401);
+
+        // Refresh cookie details just in case
+        const token = signToken(user);
+        res.cookie(SESSION_COOKIE_NAME, token, cookieOptions);
+
+        return success(res, { user: safeUser(user) }, 'Profile updated successfully.');
+    } catch (err) {
+        console.error("Profile update error:", err);
         return serverError(res, err);
     }
 };
