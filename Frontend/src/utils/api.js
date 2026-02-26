@@ -1,9 +1,11 @@
 const BASE = '/api';
 
 async function request(path, options = {}) {
+    const headers = { 'Content-Type': 'application/json', ...(options.headers || {}) };
+
     const res = await fetch(`${BASE}${path}`, {
         credentials: 'include',
-        headers: { 'Content-Type': 'application/json', ...(options.headers || {}) },
+        headers,
         ...options,
     });
     const data = await res.json().catch(() => ({}));
