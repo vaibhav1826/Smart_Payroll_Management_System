@@ -4,14 +4,15 @@ const cookieParser = require('cookie-parser');
 require('dotenv').config();
 
 const { connectDB } = require('./config/db');
-const { authRoutes } = require('./auth');
-const employeeRoutes = require('./routes/employeeRoutes');
+const authRoutes = require('./services/auth/routes/authRoutes');
+const employeeRoutes = require('./services/core/routes/employeeRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 4000;
 
 app.use(cors({ origin: true, credentials: true }));
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 // Connect MongoDB (same DB as MongoDB Compass when using same MONGO_URI)
