@@ -4,16 +4,25 @@ import { useAuth } from '../../context/AuthContext';
 import Logo from '../../components/Logo';
 import toast from 'react-hot-toast';
 
+const ROLES = [
+    { value: 'employee', label: '👷 Employee', desc: 'Standard access – mark attendance, request leaves' },
+    { value: 'supervisor', label: '🧑‍💼 Supervisor', desc: 'Manage team attendance, approve leaves' },
+    { value: 'contractor', label: '🏢 Contractor', desc: 'Full company setup – manage all teams' },
+    { value: 'admin', label: '🛡️ Admin', desc: 'System-wide administrative access' },
+];
+
 export default function Register() {
     const { register } = useAuth();
     const navigate = useNavigate();
-    const [form, setForm] = useState({ name: '', email: '', password: '', phone: '', role: 'employee' });
+    const [form, setForm] = useState({ name: '', email: '', password: '', phone: '', role: 'employee', secretKey: '' });
     const [loading, setLoading] = useState(false);
+    const [showPass, setShowPass] = useState(false);
 
     const onChange = e => setForm(p => ({ ...p, [e.target.name]: e.target.value }));
 
     const onSubmit = async (e) => {
         e.preventDefault();
+        if (!form.secretKey) return toast.error('Secret Key is required for registration.');
         if (!form.name || !form.email || !form.password) return toast.error('Name, email and password are required.');
         if (form.password.length < 6) return toast.error('Password must be at least 6 characters.');
         setLoading(true);
@@ -27,6 +36,8 @@ export default function Register() {
             setLoading(false);
         }
     };
+
+    const selectedRole = ROLES.find(r => r.value === form.role);
 
     return (
         <div className="auth-page">
@@ -43,45 +54,136 @@ export default function Register() {
                         <div className="auth-feature-item">Automated payroll calculations</div>
                         <div className="auth-feature-item">Detailed reports and audit logs</div>
                     </div>
+
+                    {/* Role highlight on left panel */}
+                    {selectedRole && (
+                        <div className="auth-role-highlight">
+                            <div className="auth-role-highlight-label">Selected Role</div>
+                            <div className="auth-role-highlight-name">{selectedRole.label}</div>
+                            <div className="auth-role-highlight-desc">{selectedRole.desc}</div>
+                        </div>
+                    )}
                 </div>
             </div>
 
             {/* Right panel — registration form */}
             <div className="auth-split-right">
-                <div className="auth-form-wrap">
+                <div className="auth-form-wrap auth-form-wrap--register">
                     <div className="auth-form-header">
                         <h2 className="auth-form-title">Create Account</h2>
-                        <p className="auth-form-subtitle">Join the Shiv Enterprises payroll platform</p>
+                        <p className="auth-form-subtitle">Join the Shiv Enterprises platform — fill in your details below</p>
                     </div>
 
-                    <form onSubmit={onSubmit} className="auth-form">
-                        <div className="form-field">
-                            <label className="form-label" htmlFor="reg-name">Full Name</label>
-                            <input id="reg-name" name="name" className="form-input" placeholder="Your full name" value={form.name} onChange={onChange} required />
+                    <form onSubmit={onSubmit} className="auth-form auth-form--register">
+
+                        {/* Secret Key — full width, prominent */}
+                        <div className="register-secret-box">
+                            <label className="form-label" htmlFor="reg-secret">
+                                🔑 Secret Key <span className="register-required-badge">Required</span>
+                            </label>
+                            <input
+                                id="reg-secret" name="secretKey"
+                                className="form-input"
+                                placeholder="Authorization key provided by your admin"
+                                value={form.secretKey}
+                                onChange={onChange}
+                                autoComplete="off"
+                                required
+                            />
+                            <p className="register-field-hint">Contact your administrator to get the registration key.</p>
                         </div>
-                        <div className="form-field">
-                            <label className="form-label" htmlFor="reg-email">Email Address</label>
-                            <input id="reg-email" name="email" type="email" className="form-input" placeholder="you@company.com" value={form.email} onChange={onChange} required />
+
+                        {/* Two-column grid for main fields */}
+                        <div className="register-grid">
+                            <div className="form-field">
+                                <label className="form-label" htmlFor="reg-name">Full Name</label>
+                                <input
+                                    id="reg-name" name="name"
+                                    className="form-input"
+                                    placeholder="Your full name"
+                                    value={form.name}
+                                    onChange={onChange}
+                                    autoComplete="name"
+                                    required
+                                />
+                            </div>
+                            <div className="form-field">
+                                <label className="form-label" htmlFor="reg-phone">Phone Number</label>
+                                <input
+                                    id="reg-phone" name="phone"
+                                    className="form-input"
+                                    placeholder="+91 XXXXX XXXXX"
+                                    value={form.phone}
+                                    onChange={onChange}
+                                    autoComplete="tel"
+                                />
+                            </div>
+                            <div className="form-field">
+                                <label className="form-label" htmlFor="reg-email">Email Address</label>
+                                <input
+                                    id="reg-email" name="email" type="email"
+                                    className="form-input"
+                                    placeholder="you@company.com"
+                                    value={form.email}
+                                    onChange={onChange}
+                                    autoComplete="email"
+                                    required
+                                />
+                            </div>
+                            <div className="form-field" style={{ position: 'relative' }}>
+                                <label className="form-label" htmlFor="reg-password">Password</label>
+                                <input
+                                    id="reg-password" name="password"
+                                    type={showPass ? 'text' : 'password'}
+                                    className="form-input"
+                                    placeholder="Minimum 6 characters"
+                                    value={form.password}
+                                    onChange={onChange}
+                                    autoComplete="new-password"
+                                    required
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowPass(v => !v)}
+                                    className="register-show-pass"
+                                    tabIndex={-1}
+                                    title={showPass ? 'Hide password' : 'Show password'}
+                                >
+                                    {showPass ? '🙈' : '👁️'}
+                                </button>
+                            </div>
                         </div>
+
+                        {/* Role selector — card-style */}
                         <div className="form-field">
-                            <label className="form-label" htmlFor="reg-phone">Phone Number</label>
-                            <input id="reg-phone" name="phone" className="form-input" placeholder="+91 XXXXX XXXXX" value={form.phone} onChange={onChange} />
+                            <label className="form-label">Your Role</label>
+                            <div className="register-role-grid">
+                                {ROLES.map(r => (
+                                    <label
+                                        key={r.value}
+                                        className={`register-role-card ${form.role === r.value ? 'register-role-card--active' : ''}`}
+                                    >
+                                        <input
+                                            type="radio"
+                                            name="role"
+                                            value={r.value}
+                                            checked={form.role === r.value}
+                                            onChange={onChange}
+                                            style={{ display: 'none' }}
+                                        />
+                                        <span className="register-role-card__label">{r.label}</span>
+                                    </label>
+                                ))}
+                            </div>
                         </div>
-                        <div className="form-field">
-                            <label className="form-label" htmlFor="reg-role">Role</label>
-                            <select id="reg-role" name="role" className="form-input" value={form.role} onChange={onChange}>
-                                <option value="employee">Employee</option>
-                                <option value="supervisor">Supervisor</option>
-                                <option value="contractor">Contractor</option>
-                                <option value="admin">Admin</option>
-                            </select>
-                        </div>
-                        <div className="form-field">
-                            <label className="form-label" htmlFor="reg-password">Password</label>
-                            <input id="reg-password" name="password" type="password" className="form-input" placeholder="Minimum 6 characters" value={form.password} onChange={onChange} required />
-                        </div>
-                        <button type="submit" className="btn btn-primary btn-full" disabled={loading} style={{ marginTop: 8 }}>
-                            {loading ? 'Creating account...' : 'Create Account'}
+
+                        <button
+                            type="submit"
+                            className="btn btn-primary btn-full"
+                            disabled={loading}
+                            style={{ marginTop: 8, height: '48px', fontSize: '15px', fontWeight: 700 }}
+                        >
+                            {loading ? 'Creating Account…' : 'Create Account →'}
                         </button>
                     </form>
 

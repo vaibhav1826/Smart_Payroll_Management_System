@@ -30,14 +30,14 @@ export default function PayrollGenerate() {
     return (
         <div>
             <div className="page-header">
-                <h1 className="page-title">💳 Generate Payroll</h1>
+                <h1 className="page-title">💳 Salary Management</h1>
             </div>
 
             <div className="stats-grid" style={{ marginBottom: 24 }}>
                 <StatCard label="Active Employees" value={activeCount} icon="👥" color="blue" />
                 <StatCard label="Selected Month" value={`${new Date(year, month - 1, 1).toLocaleString('en', { month: 'long' })} ${year}`} icon="📅" color="purple" />
                 {result && <StatCard label="Generated" value={result.count} icon="✅" color="green" />}
-                {result && <StatCard label="Total Payroll" value={formatCurrency(result.payrolls?.reduce((s, p) => s + (p.netPay || 0), 0))} icon="💰" color="yellow" />}
+                {result && <StatCard label="Total Net Pay" value={formatCurrency(result.payrolls?.reduce((s, p) => s + (Number(p.netPay) || 0), 0))} icon="💰" color="yellow" />}
             </div>
 
             <div className="card">
@@ -64,21 +64,42 @@ export default function PayrollGenerate() {
 
                 {result && (
                     <div style={{ marginTop: 24 }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+                            <h3>Generated Payrolls</h3>
+                            <button className="btn btn-outline" style={{ fontSize: 13, gap: 6 }} onClick={() => toast.error('Bank Export NEFT/RTGS feature coming soon')}>
+                                🏦 Download Bank File (NEFT/RTGS)
+                            </button>
+                        </div>
                         <div className="table-scroll">
                             <table className="datatable">
                                 <thead>
-                                    <tr><th>Employee</th><th>Dept</th><th>Days Present</th><th>Gross Pay</th><th>Deductions</th><th>Net Pay</th><th>Status</th></tr>
+                                    <tr>
+                                        <th>Employee</th>
+                                        <th>Days Present</th>
+                                        <th>Gross Pay</th>
+                                        <th>Deductions</th>
+                                        <th>Net Pay</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
                                 </thead>
                                 <tbody>
                                     {result.payrolls?.map(p => (
                                         <tr key={p._id}>
-                                            <td>{p.employee?.name || '—'}</td>
-                                            <td>{p.employee?.department || '—'}</td>
+                                            <td>
+                                                <div style={{ fontWeight: 500 }}>{p.employee?.name || '—'}</div>
+                                                <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>{p.employee?.department || '—'}</div>
+                                            </td>
                                             <td>{p.presentDays}</td>
                                             <td>{formatCurrency(p.grossPay)}</td>
-                                            <td>{formatCurrency(p.deductions)}</td>
+                                            <td style={{ color: 'var(--danger)' }}>{formatCurrency(p.totalDeductions)}</td>
                                             <td style={{ fontWeight: 600, color: 'var(--success)' }}>{formatCurrency(p.netPay)}</td>
                                             <td><span className="badge badge-blue">{p.status}</span></td>
+                                            <td>
+                                                <button className="btn btn-sm btn-ghost" onClick={() => toast.success(`Payslip PDF for ${p.employee?.name} downloading...`)}>
+                                                    📄 PDF
+                                                </button>
+                                            </td>
                                         </tr>
                                     ))}
                                 </tbody>
