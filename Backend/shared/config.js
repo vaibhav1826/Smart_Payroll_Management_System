@@ -7,4 +7,5 @@ module.exports = {
     SESSION_COOKIE_NAME: 'session',
     SESSION_COOKIE_MAX_AGE: Number(process.env.SESSION_MAX_AGE_MS) || 30 * 60 * 1000,
     NODE_ENV: process.env.NODE_ENV || 'development',
+    REGISTRATION_SECRET_KEY: process.env.REGISTRATION_SECRET_KEY || 'SHIV_REQ_2026',
 };
