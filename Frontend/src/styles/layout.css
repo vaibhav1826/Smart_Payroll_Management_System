@@ -170,7 +170,7 @@
 .dashboard-shell {
     display: flex;
     min-height: 100vh;
-    background: var(--bg-light);
+    background: transparent;
     position: relative;
 }
 
