@@ -12,6 +12,7 @@ import LoadingSpinner from './components/LoadingSpinner';
 const Home = lazy(() => import('./pages/public/Home'));
 const About = lazy(() => import('./pages/public/About'));
 const Contact = lazy(() => import('./pages/public/Contact'));
+const Register = lazy(() => import('./pages/public/Register'));
 const Login = lazy(() => import('./pages/public/Login'));
 
 // ── Role Dashboards ───────────────────────────────────────────────────────────
@@ -81,9 +82,12 @@ function Page({ children }) {
   );
 }
 
+import BackgroundManager from './components/BackgroundManager';
+
 export default function App() {
   return (
     <BrowserRouter>
+      <BackgroundManager />
       <AuthProvider>
         <Toaster
           position="top-right"
@@ -100,6 +104,7 @@ export default function App() {
             <Route path="about" element={<Page><About /></Page>} />
             <Route path="contact" element={<Page><Contact /></Page>} />
             <Route path="login" element={<Page><Login /></Page>} />
+            <Route path="register" element={<Page><Register /></Page>} />
           </Route>
 
           {/* Protected Dashboard Routes */}
