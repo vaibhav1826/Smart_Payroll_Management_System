@@ -29,9 +29,9 @@ export default function Footer() {
         <div className="footer-section">
           <h4 className="footer-heading">Contact Info</h4>
           <ul className="footer-contact">
-            <li>📧 info@shiventerprises.com</li>
-            <li>📞 +91 98765 43210</li>
-            <li>📍 Maharashtra, India</li>
+            <li>Email: vaibhavbhatt145@gmail.com</li>
+            <li>Phone: 9058065003</li>
+            <li>Address: Rudrapur, Udham Singh Nagar District, Uttarakhand, India</li>
           </ul>
         </div>
 
