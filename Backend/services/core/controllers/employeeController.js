@@ -44,11 +44,24 @@ exports.create = async (req, res) => {
         const existing = await Employee.findOne({ email: email.trim().toLowerCase() });
         if (existing) return fail(res, 'Employee with this email already exists.', 409);
 
+        let parsedBankDetails = bankDetails;
+        if (typeof parsedBankDetails === 'string') {
+            try { parsedBankDetails = JSON.parse(parsedBankDetails); } catch (e) { }
+        }
+
+        // Handle uploaded files
+        let photoUrl = '';
+        let aadhaarPhotoUrl = '';
+        if (req.files) {
+            if (req.files['photo']) photoUrl = req.files['photo'][0].filename;
+            if (req.files['aadhaarPhoto']) aadhaarPhotoUrl = req.files['aadhaarPhoto'][0].filename;
+        }
+
         const employee = await Employee.create({
-            name, email: email.trim().toLowerCase(), phone, bloodGroup, dob, gender,
+            name, email: email.trim().toLowerCase(), phone, bloodGroup, dob, gender, photo: photoUrl,
             employmentType, branch, location, joiningDate: joiningDate || Date.now(), designation, department, manager, supervisor,
             permanentAddress, currentAddress,
-            aadhaarCard, panCard, bankDetails,
+            aadhaarCard, aadhaarPhoto: aadhaarPhotoUrl, panCard, bankDetails: parsedBankDetails,
             salary: salary || 0, status: status || 'active',
             addedBy: req.user.userId,
         });
@@ -70,6 +83,16 @@ exports.update = async (req, res) => {
         ];
         const updates = {};
         allowed.forEach(k => { if (req.body[k] !== undefined) updates[k] = req.body[k]; });
+
+        // Handle file uploads on update
+        if (req.files) {
+            if (req.files['photo']) updates.photo = req.files['photo'][0].filename;
+            if (req.files['aadhaarPhoto']) updates.aadhaarPhoto = req.files['aadhaarPhoto'][0].filename;
+        }
+
+        if (updates.bankDetails && typeof updates.bankDetails === 'string') {
+            try { updates.bankDetails = JSON.parse(updates.bankDetails); } catch (e) { }
+        }
 
         if (updates.email) updates.email = updates.email.trim().toLowerCase();
         const employee = await Employee.findByIdAndUpdate(req.params.id, updates, { new: true, runValidators: true });

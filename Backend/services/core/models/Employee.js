@@ -9,6 +9,7 @@ const employeeSchema = new mongoose.Schema(
         bloodGroup: { type: String, trim: true, default: '' },
         dob: { type: Date },
         gender: { type: String, enum: ['Male', 'Female', 'Other', ''], default: '' },
+        photo: { type: String, default: '' },
 
         // ── Company Details Info ──
         registrationDate: { type: Date, default: Date.now },
@@ -16,10 +17,11 @@ const employeeSchema = new mongoose.Schema(
         branch: { type: String, trim: true, default: '' },
         location: { type: String, trim: true, default: '' },
         joiningDate: { type: Date, default: Date.now },
+        exitDate: { type: Date },
         designation: { type: String, trim: true, default: '' },
         department: { type: String, trim: true, default: '' },
-        manager: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-        supervisor: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+        manager: { type: mongoose.Schema.Types.ObjectId, ref: 'Employee' },
+        supervisor: { type: mongoose.Schema.Types.ObjectId, ref: 'Employee' },
 
         // ── Address Details ──
         permanentAddress: { type: String, trim: true, default: '' },
@@ -27,6 +29,7 @@ const employeeSchema = new mongoose.Schema(
 
         // ── Document Management System ──
         aadhaarCard: { type: String, trim: true, default: '' },
+        aadhaarPhoto: { type: String, default: '' },
         panCard: { type: String, trim: true, default: '' },
         bankDetails: {
             bankName: { type: String, default: '' },
