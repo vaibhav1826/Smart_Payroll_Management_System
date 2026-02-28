@@ -6,9 +6,7 @@ import toast from 'react-hot-toast';
 
 const BREADCRUMB_MAP = {
     '/dashboard': 'Dashboard',
-    '/industries': 'Industries',
     '/managers': 'Managers',
-    '/contractors': 'Contractors',
     '/employees': 'Employees',
     '/supervisors': 'Supervisors',
     '/attendance': 'Attendance',

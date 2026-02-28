@@ -21,7 +21,7 @@ export default function StatCard({ label, value, icon, color = 'blue', subtitle 
                     {subtitle && <div className="stat-card-sub">{subtitle}</div>}
                 </div>
                 {icon && (
-                    <div className="stat-card-icon" style={{ background: c.icon_bg, color: c.accent }}>
+                    <div className="stat-card-icon-wrapper" style={{ background: c.icon_bg, color: c.accent }}>
                         {icon}
                     </div>
                 )}

@@ -39,6 +39,7 @@ const ADMIN_SECTIONS = [
         label: 'Core Management',
         links: [
             { to: '/employees', label: 'Employee Core', icon: Icon.employee },
+            { to: '/departments', label: 'Departments', icon: Icon.industry },
         ],
     },
     {
@@ -55,12 +56,12 @@ const ADMIN_SECTIONS = [
             { to: '/payroll', label: 'Salary Management', icon: Icon.payroll },
         ],
     },
-    {
-        label: 'Platform',
-        links: [
-            { to: '/audit-logs', label: 'Audit Logs', icon: Icon.audit },
-        ],
-    },
+    // {
+    //     label: 'Platform',
+    //     links: [
+    //         { to: '/audit-logs', label: 'Audit Logs', icon: Icon.audit },
+    //     ],
+    // },
 ];
 
 const MANAGER_SECTIONS = [
@@ -74,6 +75,7 @@ const MANAGER_SECTIONS = [
         label: 'Core Management',
         links: [
             { to: '/employees', label: 'Employee Core', icon: Icon.employee },
+            { to: '/departments', label: 'Departments', icon: Icon.industry },
         ],
     },
     {
@@ -152,6 +154,11 @@ export default function Sidebar({ open, onToggle }) {
                                 end={!!end}
                                 className={({ isActive }) => `sidebar-link${isActive ? ' active' : ''}`}
                                 title={!open ? label : undefined}
+                                onClick={() => {
+                                    if (window.innerWidth <= 768) {
+                                        onToggle();
+                                    }
+                                }}
                             >
                                 <span className="sidebar-icon">{icon}</span>
                                 {open && <span className="sidebar-label">{label}</span>}
