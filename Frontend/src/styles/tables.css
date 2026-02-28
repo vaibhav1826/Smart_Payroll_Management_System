@@ -39,7 +39,9 @@
 }
 
 .table-scroll {
+    width: 100%;
     overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
     border-radius: var(--radius);
     border: 1px solid var(--border);
     background: var(--bg-white);
@@ -47,6 +49,8 @@
 
 .datatable {
     width: 100%;
+    min-width: 650px;
+    /* Ensures table doesn't shrink too much, forcing scroll */
     border-collapse: collapse;
 }
 
@@ -89,6 +93,15 @@
 
 .datatable tbody tr:hover td {
     background: #FAFAFA;
+}
+
+@media (max-width: 768px) {
+
+    .datatable th,
+    .datatable td {
+        padding: 10px 12px;
+        font-size: 12px;
+    }
 }
 
 .datatable tbody tr:hover {

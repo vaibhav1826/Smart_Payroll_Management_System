@@ -19,16 +19,18 @@
 .stat-card {
     background: var(--bg-white);
     border: 1px solid var(--border-light);
-    border-radius: var(--radius-md);
-    padding: 18px 20px;
-    box-shadow: var(--shadow-sm);
-    transition: transform var(--transition), box-shadow var(--transition);
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
     cursor: default;
+    position: relative;
+    overflow: hidden;
 }
 
 .stat-card:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
 }
 
 /* ── Stat Card Body (flex row: text + icon) ── */
@@ -61,15 +63,15 @@
     margin-top: 4px;
 }
 
-/* ── Icon badge in stat card top-right ── */
-.stat-card-icon {
-    width: 42px;
-    height: 42px;
-    border-radius: var(--radius);
+/* ── Icon badge in stat card ── */
+.stat-card-icon-wrapper {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 18px;
+    font-size: 20px;
     flex-shrink: 0;
 }
 
@@ -77,9 +79,9 @@
 .chart-card {
     background: var(--bg-white);
     border: 1px solid var(--border-light);
-    border-radius: var(--radius-md);
-    padding: 20px 20px 12px;
-    box-shadow: var(--shadow-sm);
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
 }
 
 .chart-title {
