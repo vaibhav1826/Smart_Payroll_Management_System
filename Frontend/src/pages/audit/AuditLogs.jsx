@@ -20,7 +20,7 @@ export default function AuditLogs() {
                         <label className="form-label">Module</label>
                         <select className="form-input" style={{ width: 160 }} value={params.module || ''} onChange={e => setParams(p => ({ ...p, module: e.target.value || undefined }))}>
                             <option value="">All modules</option>
-                            {['auth', 'industry', 'employee', 'contractor', 'supervisor', 'attendance', 'leave', 'payroll', 'notification'].map(m => (
+                            {['auth', 'employee', 'supervisor', 'attendance', 'leave', 'payroll', 'notification'].map(m => (
                                 <option key={m} value={m}>{m.charAt(0).toUpperCase() + m.slice(1)}</option>
                             ))}
                         </select>

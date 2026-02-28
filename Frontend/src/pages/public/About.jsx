@@ -31,7 +31,7 @@ export default function About() {
                         <h2 className="about-heading" style={{ fontSize: '1.8rem', fontWeight: 800, color: '#111827', margin: 0 }}>Who We Are</h2>
                     </div>
                     <p className="about-lead" style={{ fontSize: '1.15rem', lineHeight: '1.8', color: '#374151', margin: 0 }}>
-                        <strong>Shiv Enterprises</strong> is a premier enterprise-grade workforce management platform dedicated to simplifying complex HR operations. Built on the pillars of transparency, accuracy, and true scalability, our software is designed to handle the intricate payroll and attendance needs of modern businesses. We provide an integrated ecosystem where contractors, supervisors, and employees can collaborate seamlessly—eliminating manual errors and ensuring your workforce is paid accurately and on time, every time.
+                        <strong>Shiv Enterprises</strong> is a premier enterprise-grade workforce management platform dedicated to simplifying complex HR operations. Built on the pillars of transparency, accuracy, and true scalability, our software is designed to handle the intricate payroll and attendance needs of modern businesses. We provide an integrated ecosystem where administrators, supervisors, and employees can collaborate seamlessly—eliminating manual errors and ensuring your workforce is paid accurately and on time, every time.
                     </p>
                 </div>
             </section>
@@ -67,7 +67,7 @@ export default function About() {
                             title: 'Enterprise Architecture',
                             icon: <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#CC0000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><path d="M9 22v-4h6v4"></path><path d="M8 6h.01"></path><path d="M16 6h.01"></path><path d="M12 6h.01"></path><path d="M12 10h.01"></path><path d="M16 10h.01"></path><path d="M8 10h.01"></path><path d="M8 14h.01"></path><path d="M12 14h.01"></path><path d="M16 14h.01"></path></svg>,
                             desc: 'Secure, multi-tenant infrastructure built for complex hierarchies and large teams.',
-                            list: ['Robust Role-Based Access', 'Department & Branch mapping', 'Contractor-level billing', 'Complete audit logs & security']
+                            list: ['Robust Role-Based Access', 'Department & Branch mapping', 'Enterprise-level billing', 'Complete audit logs & security']
                         }
                     ].map(({ title, icon, desc, list }) => (
                         <div key={title} style={{
@@ -105,10 +105,10 @@ export default function About() {
                         </div>
                     ))}
                 </div>
-            </section>
+            </section >
 
             {/* Call to Action */}
-            <section className="about-cta" style={{ textAlign: 'center', background: 'linear-gradient(135deg, #CC0000 0%, #990000 100%)', padding: '60px 40px', borderRadius: '24px', color: '#fff', boxShadow: '0 20px 40px rgba(204, 0, 0, 0.2)', position: 'relative', overflow: 'hidden' }}>
+            < section className="about-cta" style={{ textAlign: 'center', background: 'linear-gradient(135deg, #CC0000 0%, #990000 100%)', padding: '60px 40px', borderRadius: '24px', color: '#fff', boxShadow: '0 20px 40px rgba(204, 0, 0, 0.2)', position: 'relative', overflow: 'hidden' }}>
                 <div style={{ position: 'absolute', top: '-50%', left: '-20%', width: '150%', height: '200%', background: 'radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%)', pointerEvents: 'none' }}></div>
                 <h2 className="about-cta-title" style={{ fontSize: 'clamp(2rem, 3vw, 2.8rem)', fontWeight: 800, marginBottom: '20px', color: '#fff', position: 'relative', zIndex: 1, letterSpacing: '-0.02em' }}>Ready to Modernize Your Operations?</h2>
                 <p style={{ fontSize: '1.2rem', color: 'rgba(255,255,255,0.9)', marginBottom: '40px', maxWidth: '600px', margin: '0 auto 40px', position: 'relative', zIndex: 1 }}>Join hundreds of organizations securely managing their workforce on the Shiv Enterprises platform today.</p>
@@ -116,7 +116,7 @@ export default function About() {
                     <button type="button" onClick={() => navigate('/contact')} style={{ backgroundColor: '#fff', color: '#CC0000', border: 'none', padding: '14px 32px', fontSize: '1.1rem', fontWeight: 700, borderRadius: '12px', cursor: 'pointer', transition: 'transform 0.2s, box-shadow 0.2s', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }} onMouseOver={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 8px 16px rgba(0,0,0,0.2)' }} onMouseOut={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.1)' }}>Contact Sales</button>
                     <button type="button" onClick={() => navigate('/')} style={{ backgroundColor: 'rgba(255,255,255,0.1)', color: '#fff', border: '2px solid rgba(255,255,255,0.3)', padding: '12px 32px', fontSize: '1.1rem', fontWeight: 600, borderRadius: '12px', cursor: 'pointer', transition: 'background 0.2s, border-color 0.2s' }} onMouseOver={e => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.2)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.5)' }} onMouseOut={e => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.1)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.3)' }}>Return Home</button>
                 </div>
-            </section>
-        </div>
+            </section >
+        </div >
     );
 }

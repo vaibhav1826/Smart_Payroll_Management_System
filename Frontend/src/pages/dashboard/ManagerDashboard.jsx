@@ -16,16 +16,11 @@ export default function ManagerDashboard() {
     const year = now.getFullYear();
     const monthLabel = now.toLocaleString('en-IN', { month: 'long', year: 'numeric' });
 
-    const { data: mgrData } = useFetch('/managers');
     const { data: supData } = useFetch('/supervisors');
     const { data: empData } = useFetch('/employees');
     const { data: attData } = useFetch('/attendance', { month, year });
     const { data: leaveData } = useFetch('/leaves', { status: 'pending' });
     const { data: payData } = useFetch('/payroll/history', { month, year });
-
-    // Find own manager record to get industry name
-    const myMgr = mgrData?.managers?.[0];
-    const industry = myMgr?.industry?.name || '—';
 
     const supervisors = supData?.supervisors || [];
     const employees = empData?.employees || [];
@@ -69,7 +64,7 @@ export default function ManagerDashboard() {
                         Manager Dashboard
                     </h1>
                     <p className="page-subtitle">
-                        {monthLabel} — {industry}{user?.name ? ` · Welcome, ${user.name}` : ''}
+                        {monthLabel} {user?.name ? ` · Welcome, ${user.name}` : ''}
                     </p>
                 </div>
                 <button className="btn btn-primary" onClick={() => navigate('/attendance')}>
@@ -79,14 +74,17 @@ export default function ManagerDashboard() {
 
             {/* KPI Cards */}
             <div className="stats-grid" style={{ marginBottom: 24 }}>
-                <StatCard label="My Industry" value={industry} icon="🏭" color="red" />
-                <StatCard label="Supervisors" value={supervisors.length} icon="👥" color="blue" />
-                <StatCard label="Active Employees" value={activeEmp} icon="🧑‍💼" color="green" />
+                <StatCard label="Active Employees" value={activeEmp} icon="🧑‍💼" color="cyan" />
                 <StatCard label="Present Today" value={presentToday} icon="✅" color="green" />
-                <StatCard label="Absent Today" value={absentToday} icon="❌" color="red" />
-                <StatCard label="Pending Leaves" value={pendingLeaves.length} icon="📋" color="yellow" />
                 <StatCard label="Payroll This Month" value={formatCurrency(totalNetPay)} icon="💳" color="purple" />
-                <StatCard label="Total Employees" value={employees.length} icon="👤" color="cyan" />
+                <StatCard label="Pending Leaves" value={pendingLeaves.length} icon="📋" color="yellow" />
+            </div>
+
+            <div className="stats-grid" style={{ marginBottom: 24 }}>
+                <StatCard label="Supervisors" value={supervisors.length} icon="👥" color="blue" />
+                <StatCard label="Total Employees" value={employees.length} icon="👤" color="blue" />
+                <StatCard label="Absent Today" value={absentToday} icon="❌" color="red" />
+                <StatCard label="On Leave" value={attendance.filter(a => a.status === 'leave').length} icon="🌴" color="orange" />
             </div>
 
             {/* Charts */}

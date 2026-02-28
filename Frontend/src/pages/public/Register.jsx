@@ -40,7 +40,7 @@ export default function Register() {
                         <h1 className="auth-brand-title">Shiv Enterprises</h1>
                         <p className="auth-brand-tagline">Smart Payroll &amp; Workforce Management Platform</p>
                         <div className="auth-brand-features">
-                            <div className="auth-feature-item">Contractor and employee management</div>
+                            <div className="auth-feature-item">Comprehensive employee management</div>
                             <div className="auth-feature-item">Attendance and shift tracking</div>
                             <div className="auth-feature-item">Leave application and approvals</div>
                             <div className="auth-feature-item">Automated payroll calculations</div>

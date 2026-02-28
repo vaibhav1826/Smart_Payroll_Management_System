@@ -21,15 +21,18 @@ export default function SupervisorDashboard() {
     const attendance = attData?.attendance || [];
     const pendingLeaves = leaveData?.leaves || [];
 
-    const presentToday = attendance.filter(a => a.status === 'present').length;
-    const absentToday = attendance.filter(a => a.status === 'absent').length;
-    const halfDayToday = attendance.filter(a => a.status === 'halfDay').length;
+    const todayStr = new Date().toISOString().split('T')[0];
+    const todaysAttendance = attendance.filter(a => a.date && a.date.startsWith(todayStr));
+
+    const presentToday = todaysAttendance.filter(a => a.status === 'present').length;
+    const absentToday = todaysAttendance.filter(a => a.status === 'absent').length;
+    const halfDayToday = todaysAttendance.filter(a => a.status === 'halfDay').length;
 
     const attChartData = [
         { name: 'Present', value: presentToday },
         { name: 'Absent', value: absentToday },
         { name: 'Half Day', value: halfDayToday },
-        { name: 'On Leave', value: attendance.filter(a => a.status === 'leave').length },
+        { name: 'On Leave', value: todaysAttendance.filter(a => a.status === 'leave').length },
     ];
 
     const leaveCols = [

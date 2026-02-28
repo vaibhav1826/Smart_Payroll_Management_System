@@ -42,22 +42,36 @@ export default function AttendanceBulk() {
 
     return (
         <div>
-            <div className="page-header">
-                <h1 className="page-title">📋 Bulk Attendance Entry</h1>
-                <button className="btn btn-primary" onClick={onSubmit} disabled={saving}>{saving ? 'Saving…' : 'Save All'}</button>
+            <div className="page-header" style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                <div style={{ padding: 8, background: 'rgba(29,78,216,0.1)', color: '#1D4ED8', borderRadius: 8 }}>
+                    <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                </div>
+                <div style={{ flex: 1 }}>
+                    <h1 className="page-title" style={{ marginBottom: 4 }}>Bulk Attendance Entry</h1>
+                    <p className="page-subtitle" style={{ margin: 0, color: 'var(--text-muted)' }}>Rapidly mark monthly attendance for the entire workforce</p>
+                </div>
+                <button className="btn btn-primary" onClick={onSubmit} disabled={saving} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                    <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" /></svg>
+                    {saving ? 'Saving…' : 'Save All Records'}
+                </button>
             </div>
-            <div className="card" style={{ marginBottom: 16 }}>
-                <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
-                    <label className="form-label">Month:</label>
-                    <select className="form-input" style={{ width: 130 }} value={month} onChange={e => setMonth(Number(e.target.value))}>
-                        {Array.from({ length: 12 }, (_, i) => (
-                            <option key={i + 1} value={i + 1}>{new Date(2000, i, 1).toLocaleString('en', { month: 'long' })}</option>
-                        ))}
-                    </select>
-                    <label className="form-label">Year:</label>
-                    <select className="form-input" style={{ width: 100 }} value={year} onChange={e => setYear(Number(e.target.value))}>
-                        {[2023, 2024, 2025, 2026].map(y => <option key={y} value={y}>{y}</option>)}
-                    </select>
+            <div className="card" style={{ marginBottom: 24 }}>
+                <h3 style={{ marginBottom: 16 }}>Select Attendance Period</h3>
+                <div style={{ display: 'flex', gap: 16, alignItems: 'flex-end', flexWrap: 'wrap' }}>
+                    <div className="form-field">
+                        <label className="form-label">Month</label>
+                        <select className="form-input" style={{ width: 160 }} value={month} onChange={e => setMonth(Number(e.target.value))}>
+                            {Array.from({ length: 12 }, (_, i) => (
+                                <option key={i + 1} value={i + 1}>{new Date(2000, i, 1).toLocaleString('en', { month: 'long' })}</option>
+                            ))}
+                        </select>
+                    </div>
+                    <div className="form-field">
+                        <label className="form-label">Year</label>
+                        <select className="form-input" style={{ width: 110 }} value={year} onChange={e => setYear(Number(e.target.value))}>
+                            {[2023, 2024, 2025, 2026].map(y => <option key={y} value={y}>{y}</option>)}
+                        </select>
+                    </div>
                 </div>
             </div>
             <div className="card">

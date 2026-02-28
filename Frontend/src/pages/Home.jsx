@@ -9,7 +9,7 @@ export default function Home({ setPage }) {
   const ctaRef = useRef(null)
 
   const workflowSteps = [
-    'Contractor creates company',
+    'Admin sets up firm profile',
     'Supervisors assigned',
     'Employees register under supervisor',
     'Attendance marked by employees',
@@ -76,7 +76,7 @@ export default function Home({ setPage }) {
             Automate Payroll, Attendance & Workforce Management — All in One Platform.
           </p>
           <p className="landing-hero-tagline landing-anim-fade-up landing-anim-delay-2">
-            Secure • Scalable • Industry-Ready
+            Secure • Scalable • Enterprise-Ready
           </p>
           <div className="landing-hero-buttons landing-anim-fade-up landing-anim-delay-3">
             <button type="button" className="landing-btn landing-btn-primary" onClick={(e) => handleNav(e, 'contact')}>
@@ -134,7 +134,7 @@ export default function Home({ setPage }) {
             How It Works
           </h2>
           <p className="landing-workflow-intro">
-            Contractors create companies — then supervisors, employees, and payroll flow from there.
+            Admin provisions the firm — then supervisors, employees, and payroll flow from there.
           </p>
           <div className="landing-workflow">
             {workflowSteps.map((label, i) => (
