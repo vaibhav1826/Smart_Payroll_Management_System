@@ -53,8 +53,8 @@ exports.create = async (req, res) => {
         let photoUrl = '';
         let aadhaarPhotoUrl = '';
         if (req.files) {
-            if (req.files['photo']) photoUrl = req.files['photo'][0].filename;
-            if (req.files['aadhaarPhoto']) aadhaarPhotoUrl = req.files['aadhaarPhoto'][0].filename;
+            if (req.files['photo']) photoUrl = req.files['photo'][0].path;
+            if (req.files['aadhaarPhoto']) aadhaarPhotoUrl = req.files['aadhaarPhoto'][0].path;
         }
 
         const employee = await Employee.create({
@@ -86,8 +86,8 @@ exports.update = async (req, res) => {
 
         // Handle file uploads on update
         if (req.files) {
-            if (req.files['photo']) updates.photo = req.files['photo'][0].filename;
-            if (req.files['aadhaarPhoto']) updates.aadhaarPhoto = req.files['aadhaarPhoto'][0].filename;
+            if (req.files['photo']) updates.photo = req.files['photo'][0].path;
+            if (req.files['aadhaarPhoto']) updates.aadhaarPhoto = req.files['aadhaarPhoto'][0].path;
         }
 
         if (updates.bankDetails && typeof updates.bankDetails === 'string') {
