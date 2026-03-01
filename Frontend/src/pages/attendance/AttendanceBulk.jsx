@@ -28,16 +28,26 @@ export default function AttendanceBulk() {
         try {
             const entries = [];
             for (const [k, s] of Object.entries(grid)) {
-                const [empId, day] = k.split('_');
+                if (!s) continue; // skip unset (—) cells
+                // ObjectId has no underscores; day is the last segment
+                const lastUnderscore = k.lastIndexOf('_');
+                const empId = k.substring(0, lastUnderscore);
+                const day = k.substring(lastUnderscore + 1);
                 const date = new Date(year, month - 1, Number(day)).toISOString();
                 entries.push({ employee: empId, date, status: s });
             }
-            if (!entries.length) return toast.error('No attendance marked.');
+            if (!entries.length) {
+                toast.error('No attendance marked. Please select a status for at least one cell.');
+                return;
+            }
             await api.post('/attendance/bulk', { entries });
-            toast.success(`${entries.length} records saved.`);
+            toast.success(`${entries.length} attendance record(s) saved successfully!`);
             setGrid({});
-        } catch (err) { toast.error(err.message); }
-        finally { setSaving(false); }
+        } catch (err) {
+            toast.error(err.message || 'Failed to save attendance. Please try again.');
+        } finally {
+            setSaving(false);
+        }
     };
 
     return (
