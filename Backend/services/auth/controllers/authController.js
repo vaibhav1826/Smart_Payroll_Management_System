@@ -8,7 +8,7 @@ const { logAudit } = require('../../../shared/middleware/auditLogger');
 const cookieOptions = {
     httpOnly: true,
     secure: NODE_ENV === 'production',
-    sameSite: 'lax',
+    sameSite: NODE_ENV === 'production' ? 'none' : 'lax',
     maxAge: SESSION_COOKIE_MAX_AGE,
     path: '/',
 };
