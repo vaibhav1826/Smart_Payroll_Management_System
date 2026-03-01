@@ -1,0 +1,21 @@
+{
+    "name": "shiv-enterprises",
+    "version": "1.0.0",
+    "description": "Shiv Enterprises Smart Payroll System",
+    "main": "Backend/index.js",
+    "scripts": {
+        "start": "node Backend/index.js",
+        "server": "cd Backend && npm start",
+        "client": "cd Frontend && npm run dev",
+        "dev": "concurrently \"npm run server\" \"npm run client\"",
+        "build": "cd Frontend && npm run build",
+        "install:all": "cd Backend && npm install && cd ../Frontend && npm install",
+        "postinstall": "npm run install:all"
+    },
+    "dependencies": {
+        "concurrently": "^8.2.2"
+    },
+    "engines": {
+        "node": ">=18.0.0"
+    }
+}
