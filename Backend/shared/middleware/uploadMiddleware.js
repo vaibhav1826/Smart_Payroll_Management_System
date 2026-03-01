@@ -1,40 +1,37 @@
 const multer = require('multer');
-const path = require('path');
-const fs = require('fs');
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+const cloudinary = require('cloudinary').v2;
 
-// Ensure upload directory exists
-const uploadDir = path.join(__dirname, '../../uploads/employees');
-if (!fs.existsSync(uploadDir)) {
-    fs.mkdirSync(uploadDir, { recursive: true });
-}
+// Configure Cloudinary using env variables
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, uploadDir);
-    },
-    filename: function (req, file, cb) {
-        // Create unique filenames like timestamp-fieldname.ext
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        cb(null, uniqueSuffix + '-' + file.fieldname + path.extname(file.originalname));
-    }
+// Store uploaded files directly to Cloudinary
+const storage = new CloudinaryStorage({
+    cloudinary,
+    params: async (req, file) => ({
+        folder: 'shiv_enterprises/employees',
+        allowed_formats: ['jpg', 'jpeg', 'png', 'svg'],
+        transformation: [{ width: 800, crop: 'limit', quality: 'auto' }],
+        public_id: `${Date.now()}-${file.fieldname}`,
+    }),
 });
 
 const fileFilter = (req, file, cb) => {
     const allowedTypes = /jpeg|jpg|png|svg/;
-    const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
+    const extname = allowedTypes.test(file.originalname.toLowerCase());
     const mimetype = allowedTypes.test(file.mimetype);
-
-    if (mimetype && extname) {
-        return cb(null, true);
-    } else {
-        cb(new Error('Only images (jpeg, jpg, png, svg) are allowed!'));
-    }
+    if (mimetype && extname) return cb(null, true);
+    cb(new Error('Only images (jpeg, jpg, png, svg) are allowed!'));
 };
 
 const uploadMiddleware = multer({
-    storage: storage,
-    limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
-    fileFilter: fileFilter
+    storage,
+    limits: { fileSize: 5 * 1024 * 1024 }, // 5MB
+    fileFilter,
 });
 
 module.exports = uploadMiddleware;
