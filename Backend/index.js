@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
+const nodemailer = require('nodemailer');
 require('dotenv').config();
 
 const { connectDB } = require('./config/db');
@@ -15,7 +16,20 @@ const app = express();
 const PORT = process.env.PORT || 4000;
 const path = require('path');
 
-app.use(cors({ origin: true, credentials: true }));
+const ALLOWED_ORIGINS = [
+  process.env.FRONTEND_URL,           // Vercel production URL
+  'http://localhost:3000',            // local dev
+  'http://localhost:5173',            // Vite default
+].filter(Boolean);
+
+app.use(cors({
+  origin: (origin, cb) => {
+    // Allow same-origin requests (Postman, mobile, etc.) or whitelisted origins
+    if (!origin || ALLOWED_ORIGINS.includes(origin)) return cb(null, true);
+    cb(new Error(`CORS blocked: ${origin}`));
+  },
+  credentials: true,
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -42,10 +56,57 @@ app.get('/api/ping', (req, res) => res.json({ ok: true }));
 // Serve static uploads (for profile photos and documents)
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-app.post('/api/contact', (req, res) => {
+// Configure Nodemailer transporter based on .env
+const transporter = nodemailer.createTransport({
+  host: process.env.SMTP_HOST || 'smtp.gmail.com',
+  port: process.env.SMTP_PORT || 587,
+  secure: false, // true for 465, false for other ports
+  auth: {
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASS,
+  },
+});
+
+app.post('/api/contact', async (req, res) => {
   const { name, email, message } = req.body;
-  console.log('Contact form received:', { name, email, message });
-  res.json({ ok: true, received: { name, email, message } });
+
+  if (!name || !email || !message) {
+    return res.status(400).json({ ok: false, message: 'All fields are required.' });
+  }
+
+  // If SMTP is not configured, just log to console to prevent crashing in dev
+  if (!process.env.SMTP_USER || !process.env.SMTP_PASS) {
+    console.log('⚠️ [Mock Email] Contact form received:', { name, email, message });
+    console.log('Please configure SMTP_USER and SMTP_PASS in your .env file to enable real emails.');
+    return res.json({ ok: true, message: 'Message logged locally (SMTP not configured).' });
+  }
+
+  try {
+    const mailOptions = {
+      from: `"${name}" <${email}>`, // sender address 
+      to: process.env.SMTP_USER, // list of receivers (the site owner)
+      subject: `New Contact Inquiry from ${name}`, // Subject line
+      text: `You have a new message from ${name} (${email}):\n\n${message}`, // plain text body
+      html: `
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px;">
+                <h2 style="color: #CC0000; border-bottom: 2px solid #CC0000; padding-bottom: 10px;">New Contact Request</h2>
+                <p><strong>Name:</strong> ${name}</p>
+                <p><strong>Email:</strong> <a href="mailto:${email}">${email}</a></p>
+                <p><strong>Message:</strong></p>
+                <div style="background: #f9f9f9; padding: 15px; border-left: 4px solid #CC0000; border-radius: 4px; white-space: pre-wrap;">${message}</div>
+                <p style="margin-top: 30px; font-size: 12px; color: #888;">This email was automatically generated from the Shiv Enterprises website contact form.</p>
+            </div>
+          `, // html body
+    };
+
+    await transporter.sendMail(mailOptions);
+    console.log(`✅ Email successfully sent from ${email}`);
+    res.json({ ok: true, message: 'Contact email sent successfully!' });
+
+  } catch (error) {
+    console.error('❌ Error sending contact email:', error);
+    res.status(500).json({ ok: false, message: 'Failed to send email. Please try again later.' });
+  }
 });
 
 // Serve frontend in production
