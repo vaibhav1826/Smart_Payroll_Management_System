@@ -22,8 +22,8 @@ export default function PublicLayout() {
                     </div>
 
                     <div className="public-nav-cta">
-                        <NavLink to="/register" className="btn btn-secondary btn-sm">Register</NavLink>
-                        <NavLink to="/login" className="btn btn-primary btn-sm">Login</NavLink>
+                        <Link to="/register" className="btn btn-secondary btn-sm">Register</Link>
+                        <Link to="/login" className="btn btn-primary btn-sm">Login</Link>
                     </div>
                 </div>
             </nav>
