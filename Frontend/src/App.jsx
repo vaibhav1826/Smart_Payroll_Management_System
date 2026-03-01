@@ -22,6 +22,7 @@ const SupervisorDashboard = lazy(() => import('./pages/dashboard/SupervisorDashb
 
 // ── Organisation ──────────────────────────────────────────────────────────────
 const EmployeeList = lazy(() => import('./pages/employee/EmployeeList'));
+const DepartmentList = lazy(() => import('./pages/employee/DepartmentList'));
 
 // ── Operations ────────────────────────────────────────────────────────────────
 const AttendanceMark = lazy(() => import('./pages/attendance/AttendanceMark'));
@@ -30,6 +31,9 @@ const ShiftManagement = lazy(() => import('./pages/attendance/ShiftManagement'))
 
 // ── Finance ───────────────────────────────────────────────────────────────────
 const PayrollGenerate = lazy(() => import('./pages/payroll/PayrollGenerate'));
+const PayrollHistory = lazy(() => import('./pages/payroll/PayrollHistory'));
+const SalarySlip = lazy(() => import('./pages/payroll/SalarySlip'));
+const SalaryStructure = lazy(() => import('./pages/payroll/SalaryStructure'));
 
 // ── Platform ──────────────────────────────────────────────────────────────────
 const AuditLogs = lazy(() => import('./pages/audit/AuditLogs'));
@@ -113,6 +117,7 @@ export default function App() {
 
             {/* Organisation — admin + manager */}
             <Route path="employees" element={<Page><AdminOrManager><EmployeeList /></AdminOrManager></Page>} />
+            <Route path="departments" element={<Page><AdminOrManager><DepartmentList /></AdminOrManager></Page>} />
 
             {/* Operations */}
             <Route path="attendance" element={<Page><AttendanceMark /></Page>} />
@@ -121,6 +126,9 @@ export default function App() {
 
             {/* Finance */}
             <Route path="payroll" element={<Page><AdminOnly><PayrollGenerate /></AdminOnly></Page>} />
+            <Route path="payroll/history" element={<Page><AdminOrManager><PayrollHistory /></AdminOrManager></Page>} />
+            <Route path="salary-slips" element={<Page><SalarySlip /></Page>} />
+            <Route path="salary-structure" element={<Page><AdminOnly><SalaryStructure /></AdminOnly></Page>} />
 
             {/* Platform */}
             <Route path="audit-logs" element={<Page><AdminOnly><AuditLogs /></AdminOnly></Page>} />
