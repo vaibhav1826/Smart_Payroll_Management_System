@@ -28,16 +28,21 @@ export default function ManagerDashboard() {
     const pendingLeaves = leaveData?.leaves || [];
     const payrolls = payData?.payrolls || [];
 
-    const presentToday = attendance.filter(a => a.status === 'present').length;
-    const absentToday = attendance.filter(a => a.status === 'absent').length;
+    const todaysAttendance = attendance.filter(a => a.date && new Date(a.date).toDateString() === now.toDateString());
+
+    const presentToday = todaysAttendance.filter(a => a.status === 'present').length;
+    const explicitAbsent = todaysAttendance.filter(a => a.status === 'absent').length;
+    const markedEmployeeIds = new Set(todaysAttendance.map(a => a.employee?._id || a.employee));
+    const implicitAbsent = employees.filter(e => e.status === 'active' && !markedEmployeeIds.has(String(e._id))).length;
+    const absentToday = explicitAbsent + implicitAbsent;
     const totalNetPay = payrolls.reduce((s, p) => s + (p.netPay || 0), 0);
     const activeEmp = employees.filter(e => e.status === 'active').length;
 
     const attChartData = [
         { name: 'Present', value: presentToday },
         { name: 'Absent', value: absentToday },
-        { name: 'Half Day', value: attendance.filter(a => a.status === 'halfDay').length },
-        { name: 'On Leave', value: attendance.filter(a => a.status === 'leave').length },
+        { name: 'Half Day', value: todaysAttendance.filter(a => a.status === 'halfDay').length },
+        { name: 'On Leave', value: todaysAttendance.filter(a => a.status === 'leave').length },
     ];
 
     const leaveCols = [

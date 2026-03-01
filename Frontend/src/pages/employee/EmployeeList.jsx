@@ -45,7 +45,9 @@ export default function EmployeeList() {
             joiningDate: row.joiningDate ? row.joiningDate.slice(0, 10) : '',
             manager: row.manager?._id || row.manager || '',
             supervisor: row.supervisor?._id || row.supervisor || '',
-            bankDetails: row.bankDetails || { bankName: '', accountNumber: '', ifscCode: '' }
+            bankDetails: row.bankDetails || { bankName: '', accountNumber: '', ifscCode: '' },
+            photo: row.photo || '',
+            aadhaarPhoto: row.aadhaarPhoto || ''
         });
         setPhotoFile(null); setAadhaarFile(null);
         setEditing(row._id); setTab('personal'); setModal('form');
@@ -69,6 +71,7 @@ export default function EmployeeList() {
                 isFormData = true;
                 submitData = new FormData();
                 Object.keys(payload).forEach(key => {
+                    if (key === 'photo' || key === 'aadhaarPhoto') return;
                     if (key === 'bankDetails') {
                         submitData.append(key, JSON.stringify(payload[key]));
                     } else if (payload[key] !== null && payload[key] !== undefined) {
@@ -101,7 +104,7 @@ export default function EmployeeList() {
                 <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                     <div style={{ width: 32, height: 32, borderRadius: '50%', background: 'rgba(29,78,216,0.1)', color: '#1D4ED8', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
                         {r.photo ? (
-                            <img src={`/uploads/employees/${r.photo}`} alt={r.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                            <img src={r.photo} alt={r.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                         ) : (
                             <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
                         )}
@@ -175,7 +178,7 @@ export default function EmployeeList() {
                                 <div className="form-field">
                                     <label className="form-label" style={{ fontWeight: 500, display: 'flex', justifyContent: 'space-between' }}>
                                         Profile Photo
-                                        {form.photo && !photoFile && <a href={`/uploads/employees/${form.photo}`} target="_blank" rel="noreferrer" style={{ fontSize: 11, color: 'var(--primary)', textDecoration: 'none' }}>View Current</a>}
+                                        {form.photo && !photoFile && <a href={form.photo} target="_blank" rel="noreferrer" style={{ fontSize: 11, color: 'var(--primary)', textDecoration: 'none' }}>View Current</a>}
                                     </label>
                                     <input type="file" className="form-input" accept="image/jpeg,image/png,image/jpg" onChange={e => setPhotoFile(e.target.files[0])} />
                                 </div>

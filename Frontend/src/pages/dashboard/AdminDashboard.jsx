@@ -21,11 +21,14 @@ export default function AdminDashboard() {
     const pendingLeaves = leaveData?.leaves?.length || 0;
     const payrolls = payrollData?.payrolls || [];
 
-    const todayStr = new Date().toISOString().split('T')[0];
-    const todaysAttendance = attendance.filter(a => a.date && a.date.startsWith(todayStr));
+    const todaysAttendance = attendance.filter(a => a.date && new Date(a.date).toDateString() === now.toDateString());
 
     const presentToday = todaysAttendance.filter(a => a.status === 'present').length;
-    const absentToday = todaysAttendance.filter(a => a.status === 'absent').length;
+    const explicitAbsent = todaysAttendance.filter(a => a.status === 'absent').length;
+    // Employees with NO attendance record for today are also considered absent
+    const markedEmployeeIds = new Set(todaysAttendance.map(a => a.employee?._id || a.employee));
+    const implicitAbsent = employees.filter(e => e.status === 'active' && !markedEmployeeIds.has(String(e._id))).length;
+    const absentToday = explicitAbsent + implicitAbsent;
     const totalNetPayroll = payrolls.reduce((s, p) => s + (p.netPay || 0), 0);
 
     const deptData = useMemo(() => {
