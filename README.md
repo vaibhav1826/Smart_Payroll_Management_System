@@ -4,7 +4,31 @@ A full-stack, role-based payroll and workforce management platform built for **S
 
 ---
 
-## 🌐 Live Features
+## 🌐 Live Demo
+
+| | Link |
+|---|---|
+| 🖥️ **Frontend (Vercel)** | [shiv-enterprises-three.vercel.app](https://shiv-enterprises-three.vercel.app) |
+| ⚙️ **Backend API (Render)** | [smart-payroll-management-system-2.onrender.com](https://smart-payroll-management-system-2.onrender.com) |
+
+> **Test Login:**  Email: `vaibhavbhatt145@gmail.com` | Password: `Vai@1234`
+
+---
+
+## 📸 Screenshots
+
+### Home Page
+![Home Page](docs/screenshots/home.png)
+
+### Login Page
+![Login Page](docs/screenshots/login.png)
+
+### Feature Architecture
+![Feature Architecture Diagram](docs/screenshots/features.png)
+
+---
+
+## ✨ Live Features
 
 | Module | Description |
 |---|---|
@@ -38,10 +62,10 @@ A full-stack, role-based payroll and workforce management platform built for **S
 | Technology | Purpose |
 |---|---|
 | **Node.js + Express** | REST API server |
-| **MongoDB + Mongoose** | Database and ODM |
+| **MongoDB Atlas + Mongoose** | Cloud database and ODM |
 | **JWT (jsonwebtoken)** | Stateless authentication via HTTP-only cookies |
 | **bcrypt** | Password hashing |
-| **Multer** | File upload handling (employee photos, documents) |
+| **Multer + Cloudinary** | File upload handling with cloud storage |
 | **Nodemailer** | Email notifications for contact form |
 | **dotenv** | Environment variable management |
 
@@ -60,13 +84,11 @@ Shiv_Enterprises/
 │   │   ├── core/              # Employees, Departments, Supervisors
 │   │   └── operations/        # Attendance, Leaves, Payroll, Shifts
 │   ├── shared/
-│   │   ├── middleware/        # authMiddleware, auditLogger, uploadMiddleware
+│   │   ├── middleware/        # authMiddleware, auditLogger, uploadMiddleware (Cloudinary)
 │   │   ├── utils/             # Response helpers
 │   │   └── rbac.js            # Role-Based Access Control definitions
-│   ├── uploads/employees/     # Uploaded profile photos & documents
 │   ├── index.js               # Main Express server entry point
-│   ├── resetDatabase.js       # 🗑️ Utility: clears all DB collections
-│   └── .env                   # Environment variables (not committed)
+│   └── resetDatabase.js       # 🗑️ Utility: clears all DB collections
 │
 ├── Frontend/
 │   ├── src/
@@ -82,9 +104,10 @@ Shiv_Enterprises/
 │   │   ├── components/        # Shared UI: Sidebar, DataTable, StatCard, Modal, etc.
 │   │   ├── context/           # AuthContext (user session)
 │   │   ├── hooks/             # useFetch (data fetching)
-│   │   ├── utils/             # api.js, formatters.js, exportUtils.js
-│   │   └── styles/            # Modular CSS files
-│   └── vite.config.js         # Vite config with API + uploads proxy
+│   │   └── utils/             # api.js, formatters.js, exportUtils.js
+│   └── vercel.json            # Vercel SPA routing config
+│
+└── docs/screenshots/          # README screenshots
 ```
 
 ---
@@ -100,13 +123,11 @@ Shiv_Enterprises/
 
 ---
 
-## ⚙️ Setup & Installation
+## ⚙️ Local Setup & Installation
 
 ### Prerequisites
 - Node.js v18+
-- MongoDB (running locally on port `27017`) or a MongoDB Atlas URI
-
----
+- MongoDB (local) or MongoDB Atlas URI
 
 ### 1. Clone the Repository
 
@@ -122,44 +143,41 @@ cd Backend
 npm install
 ```
 
-Create a `.env` file in the `Backend/` folder:
+Create a `.env` file in `Backend/`:
 
 ```env
 PORT=4000
 MONGO_URI=mongodb://localhost:27017/shiv_enterprises
-JWT_SECRET=your_super_secret_key_here
+JWT_SECRET=your_jwt_secret
 JWT_EXPIRES_IN=7d
 FRONTEND_URL=http://localhost:3000
-
-# Email (for contact form notifications)
 SMTP_HOST=smtp.gmail.com
 SMTP_PORT=587
-SMTP_USER=your_email@gmail.com
-SMTP_PASS=your_google_app_password
-SMTP_TO=your_email@gmail.com
+SMTP_USER=your@gmail.com
+SMTP_PASS=your_app_password
+CLOUDINARY_CLOUD_NAME=your_cloud_name
+CLOUDINARY_API_KEY=your_api_key
+CLOUDINARY_API_SECRET=your_api_secret
 ```
-
-Start the backend:
 
 ```powershell
-npm run dev        # Development (with nodemon)
-npm start          # Production
+npm run dev    # Starts on http://localhost:4000
 ```
-
-> The backend starts on **http://localhost:4000**
-> On first start, it **automatically creates the default admin account** from `config/seed.js`.
-
----
 
 ### 3. Frontend Setup
 
 ```powershell
 cd ../Frontend
 npm install
-npm run dev
+npm run dev    # Starts on http://localhost:3000
 ```
 
-> The frontend starts on **http://localhost:3000**
+### 4. Run Both Together (from root)
+
+```powershell
+npm install
+npm run dev
+```
 
 ---
 
@@ -169,20 +187,17 @@ npm run dev
 |---|---|
 | **Email** | `vaibhavbhatt145@gmail.com` |
 | **Password** | `Vai@1234` |
-| **Role** | Admin |
-
-> ⚠️ Change the default password after the first login. Update `Backend/config/seed.js` to change the seeded credentials.
+| **Secret Key** | `SHIV_REQ_2026` *(for registration)* |
 
 ---
 
 ## 🌐 API Routes Overview
 
-All API routes are prefixed with `/api`.
-
 ### Auth
 | Method | Route | Description |
 |---|---|---|
 | `POST` | `/api/auth/login` | Login and set JWT cookie |
+| `POST` | `/api/auth/register` | Register (requires secret key) |
 | `POST` | `/api/auth/logout` | Clear session |
 | `GET` | `/api/auth/me` | Get current logged-in user |
 
@@ -200,70 +215,41 @@ All API routes are prefixed with `/api`.
 | `GET` | `/api/attendance` | List records (filterable by month/year) |
 | `POST` | `/api/attendance` | Mark single attendance |
 | `POST` | `/api/attendance/bulk` | Bulk mark attendance |
-| `DELETE` | `/api/attendance/:id` | Delete record |
-
-### Payroll
-| Method | Route | Description |
-|---|---|---|
-| `GET` | `/api/payroll` | List payroll records |
-| `POST` | `/api/payroll/generate` | Generate payroll for a month |
-| `GET` | `/api/payroll/history` | Payroll history |
-
-### Leaves
-| Method | Route | Description |
-|---|---|---|
-| `GET` | `/api/leaves` | List leave applications |
-| `POST` | `/api/leaves` | Apply for leave |
-| `PUT` | `/api/leaves/:id/approve` | Approve/Reject leave |
 
 ### Other
 | Method | Route | Description |
 |---|---|---|
 | `POST` | `/api/contact` | Contact form — sends email notification |
 | `GET` | `/api/departments` | List departments |
+| `GET` | `/api/payroll` | Payroll records |
 | `GET` | `/api/shifts` | List shifts |
 | `GET` | `/api/audit-logs` | Admin-only audit trail |
 
 ---
 
-## � File Uploads
+## 🚀 Deployment
 
-Employee photos and Aadhaar card images are stored locally in:
-
-```
-Backend/uploads/employees/
-```
-
-Files are accessed via `/uploads/employees/<filename>` which is proxied through Vite in development.
+| Service | Platform | URL |
+|---|---|---|
+| Frontend | Vercel | [shiv-enterprises-three.vercel.app](https://shiv-enterprises-three.vercel.app) |
+| Backend | Render | [smart-payroll-management-system-2.onrender.com](https://smart-payroll-management-system-2.onrender.com) |
+| Database | MongoDB Atlas | Cloud-hosted |
+| Media Storage | Cloudinary | Cloud-hosted |
 
 ---
 
 ## 🗑️ Reset Database
-
-To wipe all data and start fresh:
 
 ```powershell
 cd Backend
 node resetDatabase.js
 ```
 
-Then restart the backend server — the default admin will be re-seeded automatically.
-
----
-
-## 📧 Contact Form Email Setup
-
-1. Go to your Google Account → **Security** → **2-Step Verification** → **App Passwords**
-2. Generate an App Password for "Mail"
-3. Add it to your `.env`:
-   ```env
-   SMTP_USER=your_gmail@gmail.com
-   SMTP_PASS=xxxx xxxx xxxx xxxx
-   ```
+Restart the backend after — the default admin is re-seeded automatically.
 
 ---
 
 ## 📄 License
 
-This project is proprietary software developed for **Shiv Enterprises**.
-All rights reserved © 2025 Shiv Enterprises.
+Proprietary software developed for **Shiv Enterprises**.  
+All rights reserved © 2026 Shiv Enterprises.
