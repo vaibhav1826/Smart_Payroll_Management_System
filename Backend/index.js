@@ -17,15 +17,21 @@ const PORT = process.env.PORT || 4000;
 const path = require('path');
 
 const ALLOWED_ORIGINS = [
-  process.env.FRONTEND_URL,           // Vercel production URL
-  'http://localhost:3000',            // local dev
-  'http://localhost:5173',            // Vite default
+  process.env.FRONTEND_URL,           // explicit production URL
+  'http://localhost:3000',
+  'http://localhost:5173',
 ].filter(Boolean);
 
 app.use(cors({
   origin: (origin, cb) => {
-    // Allow same-origin requests (Postman, mobile, etc.) or whitelisted origins
-    if (!origin || ALLOWED_ORIGINS.includes(origin)) return cb(null, true);
+    // Allow requests with no origin (Postman, mobile apps, curl)
+    if (!origin) return cb(null, true);
+    // Allow any vercel.app subdomain  
+    if (origin.endsWith('.vercel.app')) return cb(null, true);
+    // Allow localhost in development
+    if (origin.startsWith('http://localhost')) return cb(null, true);
+    // Allow exact matches from env
+    if (ALLOWED_ORIGINS.includes(origin)) return cb(null, true);
     cb(new Error(`CORS blocked: ${origin}`));
   },
   credentials: true,
