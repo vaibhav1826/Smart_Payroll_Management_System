@@ -5,12 +5,12 @@ const nodemailer = require('nodemailer');
 require('dotenv').config();
 
 const { connectDB } = require('./config/db');
-const authRoutes = require('./services/auth/routes/authRoutes');
-const employeeRoutes = require('./services/core/routes/employeeRoutes');
-const departmentRoutes = require('./services/core/routes/departmentRoutes');
-const payrollRoutes = require('./services/finance/routes/payrollRoutes');
-const shiftRoutes = require('./services/operations/routes/shiftRoutes');
-const attendanceRoutes = require('./services/operations/routes/attendanceRoutes');
+const authRoutes = require('./routes/authRoutes');
+const employeeRoutes = require('./routes/employeeRoutes');
+const departmentRoutes = require('./routes/departmentRoutes');
+const payrollRoutes = require('./routes/payrollRoutes');
+const shiftRoutes = require('./routes/shiftRoutes');
+const attendanceRoutes = require('./routes/attendanceRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 4000;
