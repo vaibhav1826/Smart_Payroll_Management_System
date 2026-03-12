@@ -1,7 +1,7 @@
 /**
  * Seed allowed users. Only these users can log in (no public registration).
  */
-const User = require('../services/auth/models/User');
+const User = require('../models/User');
 
 const ALLOWED_USERS = [
   { email: 'vaibhavbhatt145@gmail.com', password: 'Vai@1234', name: 'Vaibhav Bhatt', role: 'admin', phone: '9876543210' },
