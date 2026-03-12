@@ -1,0 +1,14 @@
+const express = require('express');
+const ctrl = require('../controllers/supervisorController');
+const { verifyToken, requireRoles } = require('../middleware/authMiddleware');
+const { auditMiddleware } = require('../middleware/auditLogger');
+const router = express.Router();
+router.use(verifyToken);
+router.use(auditMiddleware('supervisor'));
+router.get('/', ctrl.list);
+router.get('/:id', ctrl.getOne);
+router.post('/', requireRoles('admin', 'manager'), ctrl.create);
+router.put('/:id', requireRoles('admin', 'manager'), ctrl.update);
+router.delete('/:id', requireRoles('admin'), ctrl.remove);
+router.put('/:id/assign-employees', requireRoles('admin', 'manager'), ctrl.assignEmployees);
+module.exports = router;

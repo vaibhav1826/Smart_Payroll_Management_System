@@ -1,0 +1,13 @@
+const express = require('express');
+const ctrl = require('../controllers/industryController');
+const { verifyToken, requireRoles } = require('../middleware/authMiddleware');
+const { auditMiddleware } = require('../middleware/auditLogger');
+const router = express.Router();
+router.use(verifyToken);
+router.use(auditMiddleware('industry'));
+router.get('/', ctrl.list);
+router.get('/:id', ctrl.getOne);
+router.post('/', requireRoles('admin'), ctrl.create);
+router.put('/:id', requireRoles('admin'), ctrl.update);
+router.delete('/:id', requireRoles('admin'), ctrl.remove);
+module.exports = router;

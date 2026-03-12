@@ -1,0 +1,14 @@
+const express = require('express');
+const l = require('../controllers/leaveController');
+const { verifyToken, requireRoles } = require('../middleware/authMiddleware');
+const { auditMiddleware } = require('../middleware/auditLogger');
+const router = express.Router();
+router.use(verifyToken);
+router.use(auditMiddleware('leave'));
+router.get('/', l.list);
+router.post('/', l.apply);
+router.put('/:id/approve', requireRoles('admin', 'supervisor'), l.approve);
+router.put('/:id/reject', requireRoles('admin', 'supervisor'), l.reject);
+router.get('/balance/:employeeId', l.balance);
+router.delete('/:id', requireRoles('admin'), l.remove);
+module.exports = router;

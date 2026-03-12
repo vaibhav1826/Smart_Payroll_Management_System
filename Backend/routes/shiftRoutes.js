@@ -1,0 +1,10 @@
+const express = require('express');
+const s = require('../controllers/shiftController');
+const { verifyToken, requireRoles } = require('../middleware/authMiddleware');
+const router = express.Router();
+router.use(verifyToken);
+router.get('/', s.list);
+router.post('/', requireRoles('admin'), s.create);
+router.put('/:id', requireRoles('admin'), s.update);
+router.delete('/:id', requireRoles('admin'), s.remove);
+module.exports = router;

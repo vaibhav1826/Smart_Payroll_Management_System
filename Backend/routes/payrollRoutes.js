@@ -1,0 +1,13 @@
+const express = require('express');
+const pc = require('../controllers/payrollController');
+const sc = require('../controllers/salaryStructureController');
+const { verifyToken, requireRoles } = require('../middleware/authMiddleware');
+const { auditMiddleware } = require('../middleware/auditLogger');
+const router = express.Router();
+router.use(verifyToken);
+router.use(auditMiddleware('payroll'));
+router.get('/', pc.list);
+router.post('/generate', requireRoles('admin'), pc.generate);
+router.put('/:id/lock', requireRoles('admin'), pc.lock);
+router.delete('/:id', requireRoles('admin'), pc.remove);
+module.exports = router;
