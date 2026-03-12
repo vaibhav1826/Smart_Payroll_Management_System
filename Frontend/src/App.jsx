@@ -2,41 +2,41 @@ import React, { Suspense, lazy } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 
-import { AuthProvider } from './context/AuthContext';
-import PublicLayout from './layouts/PublicLayout';
-import DashboardLayout from './layouts/DashboardLayout';
-import ErrorBoundary from './components/ErrorBoundary';
-import LoadingSpinner from './components/LoadingSpinner';
+import { AuthProvider } from './controllers/context/AuthContext';
+import PublicLayout from './views/layouts/PublicLayout';
+import DashboardLayout from './views/layouts/DashboardLayout';
+import ErrorBoundary from './views/components/ErrorBoundary';
+import LoadingSpinner from './views/components/LoadingSpinner';
 
 // ── Public pages ──────────────────────────────────────────────────────────────
-const Home = lazy(() => import('./pages/public/Home'));
-const About = lazy(() => import('./pages/public/About'));
-const Contact = lazy(() => import('./pages/public/Contact'));
-const Register = lazy(() => import('./pages/public/Register'));
-const Login = lazy(() => import('./pages/public/Login'));
+const Home = lazy(() => import('./views/pages/public/Home'));
+const About = lazy(() => import('./views/pages/public/About'));
+const Contact = lazy(() => import('./views/pages/public/Contact'));
+const Register = lazy(() => import('./views/pages/public/Register'));
+const Login = lazy(() => import('./views/pages/public/Login'));
 
 // ── Role Dashboards ───────────────────────────────────────────────────────────
-const AdminDashboard = lazy(() => import('./pages/dashboard/AdminDashboard'));
-const ManagerDashboard = lazy(() => import('./pages/dashboard/ManagerDashboard'));
-const SupervisorDashboard = lazy(() => import('./pages/dashboard/SupervisorDashboard'));
+const AdminDashboard = lazy(() => import('./views/pages/dashboard/AdminDashboard'));
+const ManagerDashboard = lazy(() => import('./views/pages/dashboard/ManagerDashboard'));
+const SupervisorDashboard = lazy(() => import('./views/pages/dashboard/SupervisorDashboard'));
 
 // ── Organisation ──────────────────────────────────────────────────────────────
-const EmployeeList = lazy(() => import('./pages/employee/EmployeeList'));
-const DepartmentList = lazy(() => import('./pages/employee/DepartmentList'));
+const EmployeeList = lazy(() => import('./views/pages/employee/EmployeeList'));
+const DepartmentList = lazy(() => import('./views/pages/employee/DepartmentList'));
 
 // ── Operations ────────────────────────────────────────────────────────────────
-const AttendanceMark = lazy(() => import('./pages/attendance/AttendanceMark'));
-const AttendanceBulk = lazy(() => import('./pages/attendance/AttendanceBulk'));
-const ShiftManagement = lazy(() => import('./pages/attendance/ShiftManagement'));
+const AttendanceMark = lazy(() => import('./views/pages/attendance/AttendanceMark'));
+const AttendanceBulk = lazy(() => import('./views/pages/attendance/AttendanceBulk'));
+const ShiftManagement = lazy(() => import('./views/pages/attendance/ShiftManagement'));
 
 // ── Finance ───────────────────────────────────────────────────────────────────
-const PayrollGenerate = lazy(() => import('./pages/payroll/PayrollGenerate'));
-const PayrollHistory = lazy(() => import('./pages/payroll/PayrollHistory'));
-const SalarySlip = lazy(() => import('./pages/payroll/SalarySlip'));
-const SalaryStructure = lazy(() => import('./pages/payroll/SalaryStructure'));
+const PayrollGenerate = lazy(() => import('./views/pages/payroll/PayrollGenerate'));
+const PayrollHistory = lazy(() => import('./views/pages/payroll/PayrollHistory'));
+const SalarySlip = lazy(() => import('./views/pages/payroll/SalarySlip'));
+const SalaryStructure = lazy(() => import('./views/pages/payroll/SalaryStructure'));
 
 // ── Platform ──────────────────────────────────────────────────────────────────
-const AuditLogs = lazy(() => import('./pages/audit/AuditLogs'));
+const AuditLogs = lazy(() => import('./views/pages/audit/AuditLogs'));
 
 // ── CSS ───────────────────────────────────────────────────────────────────────
 import './styles/global.css';
@@ -48,7 +48,7 @@ import './styles/components.css';
 import './styles/responsive.css';
 
 // ── Role-based dashboard redirect ─────────────────────────────────────────────
-import { useAuth } from './context/AuthContext';
+import { useAuth } from './controllers/context/AuthContext';
 
 function RoleDashboard() {
   const { user } = useAuth();
@@ -86,7 +86,7 @@ function Page({ children }) {
   );
 }
 
-import BackgroundManager from './components/BackgroundManager';
+import BackgroundManager from './views/components/BackgroundManager';
 
 export default function App() {
   return (
