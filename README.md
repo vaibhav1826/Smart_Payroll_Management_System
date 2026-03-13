@@ -76,36 +76,31 @@ A full-stack, role-based payroll and workforce management platform built for **S
 ```
 Shiv_Enterprises/
 ├── Backend/
-│   ├── config/
-│   │   ├── db.js              # MongoDB connection
-│   │   └── seed.js            # Default admin user seeder
-│   ├── services/
-│   │   ├── auth/              # JWT auth (login, register, me)
-│   │   ├── core/              # Employees, Departments, Supervisors
-│   │   └── operations/        # Attendance, Leaves, Payroll, Shifts
-│   ├── shared/
-│   │   ├── middleware/        # authMiddleware, auditLogger, uploadMiddleware (Cloudinary)
-│   │   ├── utils/             # Response helpers
-│   │   └── rbac.js            # Role-Based Access Control definitions
-│   ├── index.js               # Main Express server entry point
-│   └── resetDatabase.js       # 🗑️ Utility: clears all DB collections
+│   ├── config/                # Database connection & seeders
+│   ├── controllers/           # Business logic and request handlers (MVC Controller)
+│   ├── middleware/            # JWT validation, RBAC, and error handlers
+│   ├── models/                # Mongoose Database Schemas (MVC Model)
+│   ├── routes/                # Express API endpoint definitions
+│   ├── utils/                 # Response formatters and validators
+│   └── index.js               # Unified Monolithic server entry point
 │
 ├── Frontend/
 │   ├── src/
-│   │   ├── App.jsx            # Router with all protected/public routes
-│   │   ├── layouts/           # PublicLayout, DashboardLayout
-│   │   ├── pages/
-│   │   │   ├── public/        # Home, About, Contact, Login, Register
-│   │   │   ├── dashboard/     # Admin, Manager, Supervisor, Employee dashboards
-│   │   │   ├── employee/      # EmployeeList, DepartmentList
-│   │   │   ├── attendance/    # AttendanceMark, AttendanceBulk, ShiftManagement
-│   │   │   ├── payroll/       # PayrollGenerate, PayrollHistory, SalarySlip, SalaryStructure
-│   │   │   └── audit/         # AuditLogs
-│   │   ├── components/        # Shared UI: Sidebar, DataTable, StatCard, Modal, etc.
-│   │   ├── context/           # AuthContext (user session)
-│   │   ├── hooks/             # useFetch (data fetching)
-│   │   └── utils/             # api.js, formatters.js, exportUtils.js
-│   └── vercel.json            # Vercel SPA routing config
+│   │   ├── controllers/       # Business Logic & State (MVC Controller layer)
+│   │   │   ├── context/       # Auth and global state
+│   │   │   └── hooks/         # Custom React hooks
+│   │   ├── models/            # Data Layer (MVC Model layer)
+│   │   │   └── api.js         # Axios instances and API services
+│   │   ├── views/             # Presentation Layer (MVC Views layer)
+│   │   │   ├── components/    # Reusable React UI blocks
+│   │   │   ├── layouts/       # Dashboard & Public structural templates
+│   │   │   └── pages/         # Feature-based view screens (Attendance, Payroll, etc.)
+│   │   ├── assets/            # Static files
+│   │   ├── styles/            # Vanilla CSS stylesheets
+│   │   ├── utils/             # Formatters, Exporters
+│   │   ├── App.jsx            # Router and Component mappings
+│   │   └── main.jsx           # React DOM renderer
+│   └── vercel.json            # Vercel deployment SPA routing config
 │
 └── docs/screenshots/          # README screenshots
 ```
